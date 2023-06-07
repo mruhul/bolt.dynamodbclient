@@ -1,0 +1,60 @@
+﻿{
+  "gotRsp": {
+    "items": [
+      {
+        "pk": "book-1",
+        "sk": "details",
+        "title": "book-title",
+        "publishedAt": "2022-12-31T13:00:00Z",
+        "price": 100.34,
+        "identifier": "8359fc3f-b5ee-4622-9993-2b5cfae03a1e"
+      }
+    ],
+    "count": 1,
+    "lastEvaluatedKey": {},
+    "scannedCount": 1
+  },
+  "gotRequest": {
+    "attributesToGet": [],
+    "consistentRead": false,
+    "expressionAttributeNames": {
+      "#SK": "SK",
+      "#PK": "PK"
+    },
+    "expressionAttributeValues": {
+      ":PK": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "partition-key",
+        "ss": []
+      },
+      ":SK": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "sort-key",
+        "ss": []
+      }
+    },
+    "keyConditionExpression": "#PK = :PK and #SK = :SK",
+    "keyConditions": {},
+    "limit": 50,
+    "projectionExpression": "PK, SK, Title, PublishedAt, Price, Identifier",
+    "queryFilter": {},
+    "scanIndexForward": false,
+    "tableName": "test-store"
+  }
+}

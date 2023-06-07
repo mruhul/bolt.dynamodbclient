@@ -1,0 +1,78 @@
+﻿{
+  "gotRequest": {
+    "attributesToGet": [],
+    "consistentRead": false,
+    "expressionAttributeNames": {},
+    "key": {
+      "PK": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "pk1",
+        "ss": []
+      },
+      "SK": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "sk1",
+        "ss": []
+      }
+    },
+    "tableName": "test-store"
+  },
+  "gotResponse": {
+    "pk": "pk1",
+    "sk": "sk1",
+    "stringValue": "hello",
+    "nullableStringValue": "world!",
+    "intValue": 3,
+    "intNullableValue": 2,
+    "longValue": 3000,
+    "longNullableValue": 2000,
+    "decimalValue": 300,
+    "decimalNullableValue": 200,
+    "doubleValue": 300,
+    "doubleNullableValue": 200,
+    "floatValue": 2,
+    "floatNullableValue": 3,
+    "guidValue": "01626357-e80b-484b-a653-91f6d52589b8",
+    "guildNullableValue": "051c1572-eb64-45b4-bb1e-b624b5b10136",
+    "dateTimeValue": "2023-02-24T05:46:17.5148201Z",
+    "nullableDateTimeValue": "2023-03-24T05:46:17.5148201Z",
+    "arrayValue": [
+      "value1",
+      "value2"
+    ],
+    "inCollectionValue": [
+      3,
+      2,
+      1
+    ],
+    "guidCollectionValue": [
+      "01626357-e80b-484b-a653-91f6d52589b8",
+      "051c1572-eb64-45b4-bb1e-b624b5b10136"
+    ],
+    "doubleCollectionValue": [
+      1.2,
+      3.4
+    ],
+    "subRecordValue": {
+      "title": "hello",
+      "age": 3
+    },
+    "boolValue": false
+  }
+}

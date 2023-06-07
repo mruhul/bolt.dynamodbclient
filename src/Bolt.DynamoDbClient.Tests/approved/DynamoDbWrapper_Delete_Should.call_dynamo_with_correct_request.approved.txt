@@ -1,0 +1,34 @@
+﻿{
+  "expected": {},
+  "expressionAttributeNames": {},
+  "expressionAttributeValues": {},
+  "key": {
+    "PK": {
+      "bool": false,
+      "isBOOLSet": false,
+      "bs": [],
+      "l": [],
+      "isLSet": false,
+      "m": {},
+      "isMSet": false,
+      "ns": [],
+      "null": false,
+      "s": "pk1",
+      "ss": []
+    },
+    "SK": {
+      "bool": false,
+      "isBOOLSet": false,
+      "bs": [],
+      "l": [],
+      "isLSet": false,
+      "m": {},
+      "isMSet": false,
+      "ns": [],
+      "null": false,
+      "s": "sk1",
+      "ss": []
+    }
+  },
+  "tableName": "test-store"
+}
