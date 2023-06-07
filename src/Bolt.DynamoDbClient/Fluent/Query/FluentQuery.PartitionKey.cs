@@ -56,7 +56,12 @@ public interface ICollectDynamoDbPartitionKeyColumnName
     IHaveDynamoDbPartitionKeyColumnName PartitionKey(string columnName);
 }
 
-public interface IHaveDynamoDbPartitionKeyValue : ICollectDynamoDbSortKeyColumnName, IDynamoDbFetchData { }
+public interface IHaveDynamoDbPartitionKeyValue : ICollectDynamoDbSortKeyColumnName, ICollectDynamoDbLimit,
+    ICollectDynamoDbExclusiveStartKey,
+    ICollectDynamoDbConsistentRead,
+    ICollectDynamoDbScanIndexForward,
+    IDynamoDbFetchData
+{ }
 public interface ICollectDynamoDbPartitionKeyValue
 {
     IHaveDynamoDbPartitionKeyValue Equals(string value);
