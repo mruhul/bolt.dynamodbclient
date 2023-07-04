@@ -82,23 +82,21 @@ internal static class AttributeValueMapper
 
         if (result == null) return null;
 
-        if(IsString(elementType))
+        if (IsString(elementType))
         {
-            foreach(var value in attr.SS)
+            foreach (var value in attr.SS)
             {
                 result.Add(value);
             }
         }
-
-        if (IsGuid(elementType))
+        else if (IsGuid(elementType))
         {
             foreach (var value in attr.SS)
             {
                 result.Add(Guid.Parse(value));
             }
         }
-
-        if(IsDateTime(elementType))
+        else if (IsDateTime(elementType))
         {
             foreach (var value in attr.SS)
             {
@@ -106,7 +104,7 @@ internal static class AttributeValueMapper
             }
         }
 
-        if (IsDateTimeOffset(elementType))
+        else if (IsDateTimeOffset(elementType))
         {
             foreach (var value in attr.SS)
             {
@@ -114,7 +112,7 @@ internal static class AttributeValueMapper
             }
         }
 
-        if (IsInt(elementType))
+        else if (IsInt(elementType))
         {
             foreach (var value in attr.NS)
             {
@@ -122,7 +120,7 @@ internal static class AttributeValueMapper
             }
         }
 
-        if (IsDecimal(elementType))
+        else if (IsDecimal(elementType))
         {
             foreach (var value in attr.NS)
             {
@@ -130,7 +128,7 @@ internal static class AttributeValueMapper
             }
         }
 
-        if (IsDouble(elementType))
+        else if (IsDouble(elementType))
         {
             foreach (var value in attr.NS)
             {
@@ -138,7 +136,7 @@ internal static class AttributeValueMapper
             }
         }
 
-        if (IsLong(elementType))
+        else if (IsLong(elementType))
         {
             foreach (var value in attr.NS)
             {
@@ -146,7 +144,7 @@ internal static class AttributeValueMapper
             }
         }
 
-        if (IsFloat(elementType))
+        else if (IsFloat(elementType))
         {
             foreach (var value in attr.NS)
             {
@@ -154,17 +152,19 @@ internal static class AttributeValueMapper
             }
         }
 
-        if (IsLong(elementType))
+        else if (IsLong(elementType))
         {
             foreach (var value in attr.NS)
             {
                 result.Add(long.Parse(value));
             }
         }
-
-        foreach (var value in attr.L)
+        else
         {
-            result.Add(MapTo(elementType, value));
+            foreach (var value in attr.L)
+            {
+                result.Add(MapTo(elementType, value));
+            }
         }
 
         return result;
