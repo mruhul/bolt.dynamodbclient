@@ -302,6 +302,188 @@
         "ns": [],
         "null": false,
         "ss": []
+      },
+      "SubRecords": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [
+          {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {
+              "Title": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "ns": [],
+                "null": false,
+                "s": "hello",
+                "ss": []
+              },
+              "Age": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "n": "16",
+                "ns": [],
+                "null": false,
+                "ss": []
+              }
+            },
+            "isMSet": true,
+            "ns": [],
+            "null": false,
+            "ss": []
+          },
+          {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {
+              "Title": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "ns": [],
+                "null": false,
+                "s": "world",
+                "ss": []
+              },
+              "Age": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "n": "18",
+                "ns": [],
+                "null": false,
+                "ss": []
+              }
+            },
+            "isMSet": true,
+            "ns": [],
+            "null": false,
+            "ss": []
+          }
+        ],
+        "isLSet": true,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "SubRecordsMap": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {
+          "hello": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {
+              "Title": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "ns": [],
+                "null": false,
+                "s": "hello",
+                "ss": []
+              },
+              "Age": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "n": "16",
+                "ns": [],
+                "null": false,
+                "ss": []
+              }
+            },
+            "isMSet": true,
+            "ns": [],
+            "null": false,
+            "ss": []
+          },
+          "world": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {
+              "Title": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "ns": [],
+                "null": false,
+                "s": "world",
+                "ss": []
+              },
+              "Age": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "n": "18",
+                "ns": [],
+                "null": false,
+                "ss": []
+              }
+            },
+            "isMSet": true,
+            "ns": [],
+            "null": false,
+            "ss": []
+          }
+        },
+        "isMSet": true,
+        "ns": [],
+        "null": false,
+        "ss": []
       }
     },
     "tableName": "test-store"

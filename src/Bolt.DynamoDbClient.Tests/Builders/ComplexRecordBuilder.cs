@@ -35,6 +35,32 @@ public static class ComplexRecordBuilder
             },
             BoolNullableValue = true,
             BoolValue = true,
+            SubRecords = new SubRecord[]
+            {
+                new SubRecord
+                {
+                    Age = 16,
+                    Title = "hello"
+                },
+                new SubRecord
+                {
+                    Age = 18,
+                    Title = "world"
+                }
+            },
+            SubRecordsMap = new Dictionary<string, SubRecord>
+            {
+                ["hello"] = new SubRecord
+                {
+                    Age = 16,
+                    Title = "hello"
+                },
+                ["world"] = new SubRecord
+                {
+                    Age = 18,
+                    Title = "world"
+                }
+            }
         };
     }
 }

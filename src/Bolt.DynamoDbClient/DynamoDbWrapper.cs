@@ -565,29 +565,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
     {
         if (value is null) return null;
 
-        if (typeMetaData.IsCollection)
-        {
-            if (typeMetaData.CollectionItemType == null) throw new ArgumentNullException(nameof(typeMetaData.CollectionItemType));
-
-            return BuildAttributeValueForArray(typeMetaData.CollectionItemType, value);
-        }
-
-        if (typeMetaData.IsSimpleType == false)
-        {
-            return BuildAttributeValueForSubItem(value);
-        }
-
-        if (type == typeof(string)) return new AttributeValue { S = (string)value };
-
-        if (type == typeof(int) || type == typeof(int?)) return new AttributeValue { N = value.ToString() };
-        if (type == typeof(double) || type == typeof(double?)) return new AttributeValue { N = value.ToString() };
-        if (type == typeof(decimal) || type == typeof(decimal?)) return new AttributeValue { N = value.ToString() };
-        if (type == typeof(long) || type == typeof(long?)) return new AttributeValue { N = value.ToString() };
-        if (type == typeof(float) || type == typeof(float?)) return new AttributeValue { N = value.ToString() };
-        if (type == typeof(DateTime) || type == typeof(DateTime?)) return new AttributeValue { S = FormatAsUtc((DateTime)value) };
-        if (type == typeof(bool) || type == typeof(bool?)) return new AttributeValue { BOOL = (bool)value };
-
-        return new AttributeValue { S = value.ToString() };
+        return AttributeValueMapper.MapFrom(value);
     }
 
     private AttributeValue? BuildAttributeValueForSubItem(object value)

@@ -32,6 +32,9 @@ public record ComplexRecord
     public SubRecord SubRecordValue { get; init; }
     public bool BoolValue { get; init; }
     public bool? BoolNullableValue { get; init; }
+
+    public SubRecord[] SubRecords { get; init; }
+    public Dictionary<string, SubRecord> SubRecordsMap { get; init; }
 }
 
 public record SubRecord

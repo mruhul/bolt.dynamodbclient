@@ -5,14 +5,15 @@ using System.Reflection;
 namespace Bolt.DynamoDbClient;
 
 internal record DynamoDbItemMetaData
-(
-    string TableName,
-    string PartitionKeyColumnName,
-    string SortKeyColumnName,
-    PropertyInfo? PartitionKeyProperty,
-    PropertyInfo? SortKeyProperty,
-    DynamoDbItemMetaProperty[] Properties
-);
+{
+    public required string TableName { get; init; }
+    public required string PartitionKeyColumnName { get; init; }
+    public required string SortKeyColumnName { get; init; }
+    public required PropertyInfo? PartitionKeyProperty { get; init; }
+    public required PropertyInfo? SortKeyProperty { get; init; }
+    public required DynamoDbItemMetaProperty[] Properties { get; init; }
+    public required TypeInfoMetaData? TypeInfoMetaData { get; init; }
+};
 
 internal record DynamoDbItemMetaProperty
 {
@@ -109,13 +110,15 @@ internal static class DynamoDbItemMetaDataReader
             });
         }
 
-        return new DynamoDbItemMetaData(
-            TableName: tableAtt?.Name ?? type.Name,
-            PartitionKeyProperty: partitionKeyProp,
-            PartitionKeyColumnName: partitionKeyColumnName ?? DefaultPartitionKeyColumnName,
-            SortKeyProperty: sortKeyProp,
-            SortKeyColumnName: sortKeyColumnName ?? DefaultSortKeyColumnName,
-            Properties: properties.ToArray());
+        return new DynamoDbItemMetaData {
+            TableName = tableAtt?.Name ?? type.Name,
+            PartitionKeyProperty = partitionKeyProp,
+            PartitionKeyColumnName = partitionKeyColumnName ?? DefaultPartitionKeyColumnName,
+            SortKeyProperty = sortKeyProp,
+            SortKeyColumnName = sortKeyColumnName ?? DefaultSortKeyColumnName,
+            Properties = properties.ToArray(),
+            TypeInfoMetaData = type.GetTypeInfo()
+        };
     }
 
     private static Type GetCollectionItemType(Type type)
