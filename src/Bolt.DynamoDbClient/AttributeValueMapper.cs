@@ -106,7 +106,7 @@ internal static class AttributeValueMapper
             }
         }
 
-        if (IsDateTime(elementType))
+        if (IsDateTimeOffset(elementType))
         {
             foreach (var value in attr.SS)
             {
@@ -156,10 +156,15 @@ internal static class AttributeValueMapper
 
         if (IsLong(elementType))
         {
-            foreach (var value in attr.L)
+            foreach (var value in attr.NS)
             {
-                result.Add(MapTo(elementType, value));
+                result.Add(long.Parse(value));
             }
+        }
+
+        foreach (var value in attr.L)
+        {
+            result.Add(MapTo(elementType, value));
         }
 
         return result;
