@@ -225,6 +225,29 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         await _db.UpdateItemAsync(request, ct);
     }
 
+    public async Task Increment<T>(IncrementRequest request, CancellationToken ct)
+    {
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
+        var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
+
+        var propertyAlias = $"#{request.PropertyName}";
+
+        await _db.UpdateItemAsync(new() 
+        { 
+            TableName = metaData.TableName,
+            Key = BuildKeyAttributeValues(metaData, request.PartitionKey, request.SortKey),
+            ExpressionAttributeNames = new Dictionary<string, string>
+            {
+                {propertyAlias, request.PropertyName }
+            },
+            ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+            {
+                {":incr", new AttributeValue{ N = request.IncrementBy.ToString() } }
+            },
+            UpdateExpression = $"SET {propertyAlias} = {propertyAlias} + :incr",
+        }, ct);
+    }
 
     public async Task Delete<T>(DeleteSingleItemRequest item, CancellationToken ct)
     {
@@ -283,6 +306,12 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             return BuildTransactionWriteItem(updateRequest);
         }
 
+        var incrementRequest = request as TransactIncrementRequest;
+        if(incrementRequest != null)
+        {
+            return BuildTransactionWriteItem(incrementRequest);
+        }
+
         var deleteRequest = request as TransactDeleteItemRequest;
         if (deleteRequest != null)
         {
@@ -333,6 +362,43 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         }
 
         return null;
+    }
+
+
+    private TransactWriteItem? BuildTransactionWriteItem(TransactIncrementRequest request)
+    {
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+
+        var metaData = DynamoDbItemMetaDataReader.Get(request.ItemType);
+
+        var paritionKeyAtt = metaData.PartitionKeyProperty != null
+                                ? BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, request.PartitionKey)
+                                : null;
+        var sortKeyAtt = metaData.SortKeyProperty != null
+                            ? BuildAttributeValue(metaData.SortKeyProperty.PropertyType, request.SortKey)
+                            : null;
+
+        if (paritionKeyAtt == null || sortKeyAtt == null) return null;
+
+        var propertyAlias = $"#{request.PropertyName}";
+
+        return new TransactWriteItem()
+        {
+            Update = new Update()
+            {
+                TableName = metaData.TableName,
+                Key = BuildKeyAttributeValues(metaData, request.PartitionKey, request.SortKey),
+                UpdateExpression = $"SET {propertyAlias} = {propertyAlias} + :incr",
+                ExpressionAttributeNames = new Dictionary<string, string>
+                {
+                    {propertyAlias, request.PropertyName}
+                },
+                ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+                {
+                    {":incr", new AttributeValue{ N = request.IncrementBy.ToString() } }
+                }
+            }
+        };
     }
 
 
@@ -568,30 +634,6 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         return AttributeValueMapper.MapFrom(value);
     }
 
-    private AttributeValue? BuildAttributeValueForSubItem(object value)
-    {
-        var metaData = DynamoDbItemMetaDataReader.Get(value.GetType());
-
-        var result = new Dictionary<string, AttributeValue>();
-
-        foreach (var prop in metaData.Properties)
-        {
-            if (prop.TypeMetaData.IsCollection || !prop.TypeMetaData.IsSimpleType) continue;
-
-            var attValue = BuildAttributeValue(prop, prop.PropertyInfo.GetValue(value));
-
-            if (attValue != null)
-            {
-                result.Add(prop.ColumnName, attValue);
-            }
-        }
-
-        return new AttributeValue
-        {
-            M = result
-        };
-    }
-
     private AttributeValue? BuildAttributeNsValueForArray<T>(object value)
     {
         var collection = value as IEnumerable<T>;
@@ -616,71 +658,6 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         return null;
     }
 
-    private AttributeValue BuildAttributeValueForArray(Type collectionItemType, object value)
-    {
-        var stringCollection = value as IEnumerable<string>;
-
-        if (stringCollection != null)
-        {
-            var items = new List<string>();
-
-            foreach (var item in stringCollection)
-            {
-                if (item != null)
-                {
-                    items.Add(item.ToString());
-                }
-            }
-            
-            return new AttributeValue
-            {
-                SS = items
-            };
-        }
-
-
-        AttributeValue? result = null;
-        result = BuildAttributeNsValueForArray<int>(value);
-        if (result != null) return result;
-
-        result = BuildAttributeNsValueForArray<double>(value);
-        if (result != null) return result;
-
-        result = BuildAttributeNsValueForArray<decimal>(value);
-        if (result != null) return result;
-
-        result = BuildAttributeNsValueForArray<long>(value);
-        if (result != null) return result;
-
-        result = BuildAttributeNsValueForArray<float>(value);
-        if (result != null) return result;
-
-        var collection = value as IEnumerable;
-
-        if (collection != null)
-        {
-            var items = new List<string>();
-
-            foreach (var item in collection)
-            {
-                if (item != null)
-                {
-                    items.Add(item.ToString() ?? string.Empty);
-                }
-            }
-
-            return new AttributeValue
-            {
-                SS = items
-            };
-        }
-
-        return new AttributeValue
-        {
-            S = value.ToString()
-        };
-    }
-
     private const string UtcFormat = "o";
     private static string FormatAsUtc(DateTime source)
         => source.Kind == DateTimeKind.Utc
@@ -692,6 +669,13 @@ public record DeleteSingleItemRequest(object partitionKey, object sortKey);
 
 public record GetSingleItemRequest(object PartitionKey, object SortKey);
 
+public record IncrementRequest 
+{ 
+    public required object PartitionKey { get; init; }
+    public required object SortKey { get; init; }
+    public required string PropertyName { get; init; }
+    public int IncrementBy { get; init; } = 1;
+}
 
 public abstract record WriteItemRequest
 {
@@ -702,6 +686,15 @@ public record TransactCreateItemRequest(object Item) : WriteItemRequest;
 public record TransactUpdateItemRequest(object Item, bool SkipNullValue) : WriteItemRequest;
 
 public record TransactUpsertItemRequest(object Item) : WriteItemRequest;
+
+public record TransactIncrementRequest : WriteItemRequest
+{
+    public required Type ItemType { get; init; }
+    public required object PartitionKey { get; init; }
+    public required object SortKey { get; init; }
+    public required string PropertyName { get; init; }
+    public int IncrementBy { get; init; } = 1;
+}
 
 public abstract record TransactDeleteItemRequest(Type ItemType, object PartitionKey, object SortKey) : WriteItemRequest;
 

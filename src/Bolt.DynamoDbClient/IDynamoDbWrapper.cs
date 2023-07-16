@@ -58,6 +58,15 @@ public interface IDynamoDbWrapper
     Task Delete<T>(DeleteSingleItemRequest item, CancellationToken ct = default);
 
     Task<DbSearchResponse<T>> Query<T>(DbSearchRequest request, CancellationToken ct = default) where T : new();
+    
+    /// <summary>
+    /// Inrement value of an item
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="request"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    Task Increment<T>(IncrementRequest request, CancellationToken ct);
 }
 
 public record DbSearchRequest

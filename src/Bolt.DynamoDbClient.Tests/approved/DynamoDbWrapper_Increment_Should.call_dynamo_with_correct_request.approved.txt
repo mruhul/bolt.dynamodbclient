@@ -1,0 +1,54 @@
+﻿{
+  "gotRequest": {
+    "attributeUpdates": {},
+    "expected": {},
+    "expressionAttributeNames": {
+      "#IntValue": "IntValue"
+    },
+    "expressionAttributeValues": {
+      ":incr": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "2",
+        "ns": [],
+        "null": false,
+        "ss": []
+      }
+    },
+    "key": {
+      "PK": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "pk",
+        "ss": []
+      },
+      "SK": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "sk",
+        "ss": []
+      }
+    },
+    "tableName": "test-store",
+    "updateExpression": "SET #IntValue = #IntValue \u002B :incr"
+  }
+}

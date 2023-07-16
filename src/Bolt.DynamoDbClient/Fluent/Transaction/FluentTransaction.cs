@@ -48,6 +48,23 @@ public class FluentTransaction
         return this;
     }
 
+    public FluentTransaction Increment<T>(string propertyName, object pk, object sk, int incrementBy = 1)
+    {
+        if (pk is null) throw new ArgumentNullException(nameof(pk));
+        if (sk is null) throw new ArgumentNullException(nameof(sk));
+
+        _requests.Add(new TransactIncrementRequest 
+        { 
+            ItemType = typeof(T),
+            PartitionKey = pk,
+            SortKey = sk,
+            IncrementBy = incrementBy,
+            PropertyName = propertyName,
+        });
+
+        return this;
+    }
+
     public Task Execute(CancellationToken ct = default)
     {
         return _db.WriteItemsInTransaction(_requests, ct);
