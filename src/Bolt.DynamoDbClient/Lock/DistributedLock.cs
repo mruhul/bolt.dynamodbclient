@@ -1,16 +1,13 @@
-using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 
-namespace Bolt.DynamoDbClient.DistributedLock;
+namespace Bolt.DynamoDbClient.Lock;
 
-internal sealed class DistributedLockImpl : IDistributedLock
+internal sealed class DistributedLock
 {
-    private readonly IAmazonDynamoDB _db;
     private readonly LocksRepository _repository;
 
-    public DistributedLockImpl(IAmazonDynamoDB db, LocksRepository repository)
+    public DistributedLock(LocksRepository repository)
     {
-        _db = db;
         _repository = repository;
     }    
     

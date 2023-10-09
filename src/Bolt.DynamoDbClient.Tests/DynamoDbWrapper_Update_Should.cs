@@ -13,7 +13,7 @@ namespace Bolt.DynamoDbClient.Tests
         public DynamoDbWrapper_Update_Should()
         {
             fake = Substitute.For<IAmazonDynamoDB>();
-            sut = new DynamoDbWrapper(fake);
+            sut = DynamoDbWrapperBuilder.Build(fake);
         }
 
         [Theory]

@@ -2,7 +2,7 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 
-namespace Bolt.DynamoDbClient.DistributedLock;
+namespace Bolt.DynamoDbClient.Lock;
 
 internal record CreateLockRecordRequest
 {

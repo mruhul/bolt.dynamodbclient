@@ -13,7 +13,7 @@ public class DynamoDbWrapper_GetSingle_Should
     public DynamoDbWrapper_GetSingle_Should()
     {
         fake = Substitute.For<IAmazonDynamoDB>();
-        sut = new DynamoDbWrapper(fake);
+        sut = DynamoDbWrapperBuilder.Build(fake);
     }
 
     [Fact]

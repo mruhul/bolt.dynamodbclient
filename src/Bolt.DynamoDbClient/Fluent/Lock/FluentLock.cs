@@ -1,17 +1,17 @@
-﻿using Bolt.DynamoDbClient.DistributedLock;
+﻿using Bolt.DynamoDbClient.Lock;
 
 namespace Bolt.DynamoDbClient.Fluent.Lock;
 
-public class FluentLock : IHaveFluentLockKey, IHaveFluentLockTimeout, IHaveFluentLockRetry
+internal class FluentLock : IHaveFluentLockKey, IHaveFluentLockTimeout, IHaveFluentLockRetry
 {
-    private readonly IDistributedLock _distributedLock;
+    private readonly IDynamoDbWrapper _distributedLock;
     private readonly string _key;
     private readonly string? _token;
     private TimeSpan? _duration;
     private int? _retry;
     private int _delayInMs = 200;
 
-    public FluentLock(IDistributedLock distributedLock, string key, string token)
+    public FluentLock(IDynamoDbWrapper distributedLock, string key, string token)
     {
         _distributedLock = distributedLock;
         _key = key;

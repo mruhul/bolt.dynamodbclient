@@ -68,6 +68,25 @@ public interface IDynamoDbWrapper
     /// <param name="ct"></param>
     /// <returns></returns>
     Task Increment<T>(IncrementRequest request, CancellationToken ct);
+    
+    /// <summary>
+    /// Acquire a lock in dynamodb based on supplied key and token.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="token"></param>
+    /// <param name="duration"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    Task<bool> Acquire(string key, string token, TimeSpan duration, CancellationToken ct = default);
+    
+    /// <summary>
+    /// Release a lock in dynamodb
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="token"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    Task<bool> Release(string key, string token, CancellationToken ct = default);
 }
 
 public record DbSearchRequest

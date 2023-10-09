@@ -15,7 +15,7 @@ public class DynamoDbWrapper_Query_Should
     public DynamoDbWrapper_Query_Should()
     {
         fake = Substitute.For<IAmazonDynamoDB>();
-        sut = new DynamoDbWrapper(fake);
+        sut = DynamoDbWrapperBuilder.Build(fake);
     }
 
     [Fact]

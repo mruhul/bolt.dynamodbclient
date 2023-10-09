@@ -1,4 +1,4 @@
-﻿using Bolt.DynamoDbClient.DistributedLock;
+﻿using Bolt.DynamoDbClient.Lock;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -11,7 +11,7 @@ public static class IocSetup
         options ??= new IocSetupOptions();
         
         services.TryAddTransient<LocksRepository>();
-        services.TryAddTransient<IDistributedLock,DistributedLockImpl>();
+        services.TryAddTransient<DistributedLock>();
         services.TryAddTransient<LocksRepository>();
         services.TryAddSingleton(options.LockTableSettings);
         services.TryAddTransient<IDynamoDbWrapper, DynamoDbWrapper>();

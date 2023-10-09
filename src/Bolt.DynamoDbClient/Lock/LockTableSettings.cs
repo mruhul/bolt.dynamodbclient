@@ -1,4 +1,4 @@
-namespace Bolt.DynamoDbClient.DistributedLock;
+namespace Bolt.DynamoDbClient.Lock;
 
 public record LockTableSettings
 {

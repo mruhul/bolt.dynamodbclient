@@ -2,16 +2,19 @@
 using Amazon.DynamoDBv2.Model;
 using System.Collections;
 using System.Text;
+using Bolt.DynamoDbClient.Lock;
 
 namespace Bolt.DynamoDbClient;
 
 internal class DynamoDbWrapper : IDynamoDbWrapper
 {
     private readonly IAmazonDynamoDB _db;
+    private readonly DistributedLock _distributedLock;
 
-    public DynamoDbWrapper(IAmazonDynamoDB db)
+    public DynamoDbWrapper(IAmazonDynamoDB db, DistributedLock distributedLock)
     {
         _db = db;
+        _distributedLock = distributedLock;
     }
 
     public async Task<DbSearchResponse<T>> Query<T>(DbSearchRequest request, CancellationToken ct) where T: new()
@@ -247,6 +250,16 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             },
             UpdateExpression = $"SET {propertyAlias} = {propertyAlias} + :incr",
         }, ct);
+    }
+
+    public Task<bool> Acquire(string key, string token, TimeSpan duration, CancellationToken ct = default)
+    {
+        return _distributedLock.Acquire(key, token, duration, ct);
+    }
+
+    public Task<bool> Release(string key, string token, CancellationToken ct = default)
+    {
+        return _distributedLock.Release(key, token, ct);
     }
 
     public async Task Delete<T>(DeleteSingleItemRequest item, CancellationToken ct)
