@@ -1,4 +1,6 @@
-﻿using Bolt.DynamoDbClient.Fluent.Batch;
+﻿using Bolt.DynamoDbClient.DistributedLock;
+using Bolt.DynamoDbClient.Fluent.Batch;
+using Bolt.DynamoDbClient.Fluent.Lock;
 using Bolt.DynamoDbClient.Fluent.Query;
 using Bolt.DynamoDbClient.Fluent.Transaction;
 
@@ -79,5 +81,25 @@ namespace Bolt.DynamoDbClient
         /// <returns></returns>
         public static FluentTransaction Transaction(this IDynamoDbWrapper db) => new FluentTransaction(db);
 
+        /// <summary>
+        /// Create instance of distributed lock based on supplied key, token and provide fluent interface
+        /// to execute a task inside a lock
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="key"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static IHaveFluentLockKey LockBy(this IDistributedLock source, string key, string token) =>
+            new FluentLock(source, key, token);
+        
+        /// <summary>
+        /// Create instance of distributed lock based on supplied key and provide fluent interface
+        /// to execute a task inside a lock
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static IHaveFluentLockKey LockBy(this IDistributedLock source, string key) =>
+            new FluentLock(source, key, Guid.NewGuid().ToString());
     }
 }

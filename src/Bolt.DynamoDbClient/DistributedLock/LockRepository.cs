@@ -4,10 +4,10 @@ using Amazon.DynamoDBv2.Model;
 
 namespace Bolt.DynamoDbClient.DistributedLock;
 
-internal class CreateLockRecordRequest
+internal record CreateLockRecordRequest
 {
-    public string Key { get; init; }
-    public string Token { get; init; }
+    public required string Key { get; init; }
+    public required string Token { get; init; }
     
     public long ExpiredAtInUnixTimeSeconds { get; init; }
     
@@ -25,7 +25,7 @@ internal sealed class LocksRepository
         _settings = settings;
     }
 
-    public async Task<bool> Create(CreateLockRecordRequest request)
+    public async Task<bool> Create(CreateLockRecordRequest request, CancellationToken ct)
     {
         var putRequest = new PutItemRequest
         {
@@ -58,12 +58,12 @@ internal sealed class LocksRepository
             }
         };
 
-        var rsp = await _db.PutItemAsync(putRequest);
+        var rsp = await _db.PutItemAsync(putRequest,ct);
 
         return rsp.HttpStatusCode == HttpStatusCode.OK;
     }
 
-    public async Task Delete(string key, string token)
+    public async Task Delete(string key, string token, CancellationToken ct)
     {
         var request = new DeleteItemRequest
         {
@@ -84,6 +84,6 @@ internal sealed class LocksRepository
             }
         };
 
-        await _db.DeleteItemAsync(request);
+        await _db.DeleteItemAsync(request, ct);
     }
 }

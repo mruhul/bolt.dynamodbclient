@@ -59,6 +59,7 @@ public interface IDynamoDbWrapper
 
     Task<DbSearchResponse<T>> Query<T>(DbSearchRequest request, CancellationToken ct = default) where T : new();
     
+    
     /// <summary>
     /// Inrement value of an item
     /// </summary>
