@@ -594,7 +594,10 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             {
                 if(skipNullValues) continue;
 
-                attValue = new AttributeValue();
+                attValue = new AttributeValue
+                {
+                    NULL = true
+                };
             }
 
             result[prop.ColumnName] = attValue;

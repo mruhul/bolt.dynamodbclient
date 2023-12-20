@@ -54,7 +54,7 @@
         "m": {},
         "isMSet": false,
         "ns": [],
-        "null": false,
+        "null": true,
         "ss": []
       },
       "IntValue": {
@@ -79,7 +79,7 @@
         "m": {},
         "isMSet": false,
         "ns": [],
-        "null": false,
+        "null": true,
         "ss": []
       },
       "LongValue": {
@@ -130,7 +130,7 @@
         "m": {},
         "isMSet": false,
         "ns": [],
-        "null": false,
+        "null": true,
         "ss": []
       },
       "DoubleValue": {
@@ -181,7 +181,7 @@
         "m": {},
         "isMSet": false,
         "ns": [],
-        "null": false,
+        "null": true,
         "ss": []
       },
       "GuidValue": {
@@ -206,7 +206,7 @@
         "m": {},
         "isMSet": false,
         "ns": [],
-        "null": false,
+        "null": true,
         "ss": []
       },
       "DateTimeValue": {
