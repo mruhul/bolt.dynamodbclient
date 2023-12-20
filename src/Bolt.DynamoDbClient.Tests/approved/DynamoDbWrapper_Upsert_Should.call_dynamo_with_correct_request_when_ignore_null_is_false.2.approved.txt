@@ -1,0 +1,547 @@
+﻿{
+  "key": "2",
+  "scenario": "When nullable are empty",
+  "gotRequest": {
+    "expected": {},
+    "expressionAttributeNames": {},
+    "expressionAttributeValues": {},
+    "item": {
+      "PK": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "complex-1",
+        "ss": []
+      },
+      "SK": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "complex-sk-1",
+        "ss": []
+      },
+      "StringValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "hello",
+        "ss": []
+      },
+      "NullableStringValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "IntValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "3",
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "IntNullableValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "LongValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "3000",
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "LongNullableValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "2000",
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "DecimalValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "300",
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "DecimalNullableValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "DoubleValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "300",
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "DoubleNullableValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "200",
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "FloatValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "3",
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "FloatNullableValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "GuidValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "01626357-e80b-484b-a653-91f6d52589b8",
+        "ss": []
+      },
+      "GuildNullableValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "DateTimeValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "2023-02-24T05:46:17.5148201Z",
+        "ss": []
+      },
+      "NullableDateTimeValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "2023-03-24T05:46:17.5148201Z",
+        "ss": []
+      },
+      "ArrayValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": [
+          "value1",
+          "value2"
+        ]
+      },
+      "InCollectionValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [
+          "1",
+          "2",
+          "3"
+        ],
+        "null": false,
+        "ss": []
+      },
+      "GuidCollectionValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": [
+          "01626357-e80b-484b-a653-91f6d52589b8",
+          "051c1572-eb64-45b4-bb1e-b624b5b10136"
+        ]
+      },
+      "DoubleCollectionValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [
+          "1.2",
+          "3.4"
+        ],
+        "null": false,
+        "ss": []
+      },
+      "SubRecordValue": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {
+          "Title": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "null": false,
+            "s": "hello",
+            "ss": []
+          },
+          "Age": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "n": "16",
+            "ns": [],
+            "null": false,
+            "ss": []
+          }
+        },
+        "isMSet": true,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "BoolValue": {
+        "bool": true,
+        "isBOOLSet": true,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "BoolNullableValue": {
+        "bool": true,
+        "isBOOLSet": true,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "SubRecords": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [
+          {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {
+              "Title": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "ns": [],
+                "null": false,
+                "s": "hello",
+                "ss": []
+              },
+              "Age": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "n": "16",
+                "ns": [],
+                "null": false,
+                "ss": []
+              }
+            },
+            "isMSet": true,
+            "ns": [],
+            "null": false,
+            "ss": []
+          },
+          {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {
+              "Title": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "ns": [],
+                "null": false,
+                "s": "world",
+                "ss": []
+              },
+              "Age": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "n": "18",
+                "ns": [],
+                "null": false,
+                "ss": []
+              }
+            },
+            "isMSet": true,
+            "ns": [],
+            "null": false,
+            "ss": []
+          }
+        ],
+        "isLSet": true,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "ss": []
+      },
+      "SubRecordsMap": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {
+          "hello": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {
+              "Title": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "ns": [],
+                "null": false,
+                "s": "hello",
+                "ss": []
+              },
+              "Age": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "n": "16",
+                "ns": [],
+                "null": false,
+                "ss": []
+              }
+            },
+            "isMSet": true,
+            "ns": [],
+            "null": false,
+            "ss": []
+          },
+          "world": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "l": [],
+            "isLSet": false,
+            "m": {
+              "Title": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "ns": [],
+                "null": false,
+                "s": "world",
+                "ss": []
+              },
+              "Age": {
+                "bool": false,
+                "isBOOLSet": false,
+                "bs": [],
+                "l": [],
+                "isLSet": false,
+                "m": {},
+                "isMSet": false,
+                "n": "18",
+                "ns": [],
+                "null": false,
+                "ss": []
+              }
+            },
+            "isMSet": true,
+            "ns": [],
+            "null": false,
+            "ss": []
+          }
+        },
+        "isMSet": true,
+        "ns": [],
+        "null": false,
+        "ss": []
+      }
+    },
+    "tableName": "test-store"
+  }
+}

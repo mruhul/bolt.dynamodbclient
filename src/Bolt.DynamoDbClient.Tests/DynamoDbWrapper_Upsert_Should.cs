@@ -41,6 +41,32 @@ namespace Bolt.DynamoDbClient.Tests
                 GotRequest = gotRequest
             }.ShouldMatchApproved(input.Key, input.Scenario);
         }
+        
+        [Theory]
+        [MemberData(nameof(TestData))]
+        public void call_dynamo_with_correct_request_when_ignore_null_is_false(TestData<ComplexRecord> input)
+        {
+            PutItemRequest gotRequest = null;
+
+            _fake.PutItemAsync(Arg.Any<PutItemRequest>(), Arg.Any<CancellationToken>())
+                .Returns(new PutItemResponse())
+                .AndDoes(c =>
+                {
+                    gotRequest = c.Arg<PutItemRequest>();
+                });
+
+
+            _sut.Upsert(input.Value, false);
+
+            _fake.Received().PutItemAsync(Arg.Any<PutItemRequest>(), Arg.Any<CancellationToken>());
+
+            new
+            {
+                Key = input.Key,
+                Scenario = input.Scenario,
+                GotRequest = gotRequest
+            }.ShouldMatchApproved(input.Key, input.Scenario);
+        }
 
         public static IEnumerable<object[]> TestData = new TestData<ComplexRecord>[]
         {

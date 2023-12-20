@@ -1,6 +1,5 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using System.Collections;
 using System.Text;
 using Bolt.DynamoDbClient.Lock;
 
@@ -44,35 +43,28 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             projectedExpression = projectionExpressionSb.ToString();
         }
 
-        try
+        var rsp = await _db.QueryAsync(new QueryRequest
         {
-            var rsp = await _db.QueryAsync(new QueryRequest
-            {
-                ProjectionExpression = projectedExpression,
-                ExclusiveStartKey = request.ExclusiveStartKey,
-                ConsistentRead = request.ConsistentRead ?? false,
-                FilterExpression = request.FilterExpression,
-                IndexName = request.IndexName,
-                TableName = metaData.TableName,
-                KeyConditionExpression = request.KeyConditionExpression,
-                ExpressionAttributeNames = request.ExpressionAttributeNames,
-                ExpressionAttributeValues = request.ExpressionAttributeValues,
-                Limit = request.Limit ?? 50,
-                ScanIndexForward = request.ScanIndexForward ?? false
-            }, ct);
+            ProjectionExpression = projectedExpression,
+            ExclusiveStartKey = request.ExclusiveStartKey,
+            ConsistentRead = request.ConsistentRead ?? false,
+            FilterExpression = request.FilterExpression,
+            IndexName = request.IndexName,
+            TableName = metaData.TableName,
+            KeyConditionExpression = request.KeyConditionExpression,
+            ExpressionAttributeNames = request.ExpressionAttributeNames,
+            ExpressionAttributeValues = request.ExpressionAttributeValues,
+            Limit = request.Limit ?? 50,
+            ScanIndexForward = request.ScanIndexForward ?? false
+        }, ct);
 
-            return new DbSearchResponse<T>
-            (
-                Items: MapFromItems<T>(rsp.Items),
-                Count: rsp.Count,
-                LastEvaluatedKey: rsp.LastEvaluatedKey,
-                ScannedCount: rsp.ScannedCount
-            );
-        }
-        catch(Exception e)
-        {
-            throw e;
-        }
+        return new DbSearchResponse<T>
+        (
+            Items: MapFromItems<T>(rsp.Items),
+            Count: rsp.Count,
+            LastEvaluatedKey: rsp.LastEvaluatedKey,
+            ScannedCount: rsp.ScannedCount
+        );
     }
    
     public async Task<T?> GetSingleItem<T>(GetSingleItemRequest getSingleItem, CancellationToken ct) where T : new()
@@ -175,13 +167,13 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         return new DbBatchReadResponse(result);
     }
 
-    public async Task Upsert(object item, CancellationToken ct)
+    public async Task Upsert(object item, bool skipNullValues, CancellationToken ct)
     {
         if(item == null) throw new ArgumentNullException(nameof(item));
 
         var metaData = DynamoDbItemMetaDataReader.Get(item.GetType());
 
-        await _db.PutItemAsync(BuildUpsertRequest(metaData, item), ct);
+        await _db.PutItemAsync(BuildUpsertRequest(metaData, item, skipNullValues), ct);
     }
 
     private IEnumerable<T> MapFromItems<T>(List<Dictionary<string, AttributeValue>> source) where T : new()
@@ -205,8 +197,8 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
         try
         {
-            var rsp = await _db.PutItemAsync(BuildCreateRequest(metaData, item), ct);
-            
+            await _db.PutItemAsync(BuildCreateRequest(metaData, item), ct);
+
             return true;
         }
         catch (ConditionalCheckFailedException)
@@ -301,43 +293,38 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
     private TransactWriteItem? BuildTransactWriteItem(WriteItemRequest request)
     {
-        var createRequest = request as TransactCreateItemRequest;
-        if (createRequest != null)
+        if (request is TransactCreateItemRequest createRequest)
         {
             return BuildTransactionWriteItem(createRequest);
         }
 
-        var upsertRequest = request as TransactUpsertItemRequest;
-        if (upsertRequest != null)
+        if (request is TransactUpsertItemRequest upsertRequest)
         {
             return BuildTransactionWriteItem(upsertRequest);
         }
 
-        var updateRequest = request as TransactUpdateItemRequest;
-        if (updateRequest != null)
+        if (request is TransactUpdateItemRequest updateRequest)
         {
             return BuildTransactionWriteItem(updateRequest);
         }
 
-        var incrementRequest = request as TransactIncrementRequest;
-        if(incrementRequest != null)
+        if(request is TransactIncrementRequest incrementRequest)
         {
             return BuildTransactionWriteItem(incrementRequest);
         }
 
-        var deleteRequest = request as TransactDeleteItemRequest;
-        if (deleteRequest != null)
+        if (request is TransactDeleteItemRequest deleteRequest)
         {
             var metaData = DynamoDbItemMetaDataReader.Get(deleteRequest.ItemType);
 
-            var paritionKeyAtt = metaData.PartitionKeyProperty != null 
+            var partitionKeyAtt = metaData.PartitionKeyProperty != null 
                                 ? BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, deleteRequest.PartitionKey)
                                 : null;
             var sortKeyAtt = metaData.SortKeyProperty != null
                                 ? BuildAttributeValue(metaData.SortKeyProperty.PropertyType, deleteRequest.SortKey)
                                 : null;
 
-            if (paritionKeyAtt != null && sortKeyAtt != null)
+            if (partitionKeyAtt != null && sortKeyAtt != null)
             {
                 return new TransactWriteItem()
                 {
@@ -346,7 +333,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
                         TableName = metaData.TableName,
                         Key = new Dictionary<string, AttributeValue>
                         {
-                            [metaData.PartitionKeyColumnName] = paritionKeyAtt,
+                            [metaData.PartitionKeyColumnName] = partitionKeyAtt,
                             [metaData.SortKeyColumnName] = sortKeyAtt
                         }
                     }
@@ -434,7 +421,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
     private TransactWriteItem BuildTransactionWriteItem(TransactUpsertItemRequest upsertRequest)
     {
         var metaData = DynamoDbItemMetaDataReader.Get(upsertRequest.Item.GetType());
-        var dbReq = BuildUpsertRequest(metaData, upsertRequest.Item);
+        var dbReq = BuildUpsertRequest(metaData, upsertRequest.Item, upsertRequest.SkipNullValue);
         return new TransactWriteItem()
         {
             Put = new Put
@@ -473,7 +460,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         return new PutItemRequest
         {
             TableName = metaData.TableName,
-            Item = BuildUpsertAttributes(metaData, item),
+            Item = BuildUpsertAttributes(metaData, item, true),
             ConditionExpression = "attribute_not_exists(#pk) and attribute_not_exists(#sk)",
             ExpressionAttributeNames = new Dictionary<string, string>
             {
@@ -483,12 +470,12 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         };
     }
 
-    private PutItemRequest BuildUpsertRequest(DynamoDbItemMetaData metaData, object item)
+    private PutItemRequest BuildUpsertRequest(DynamoDbItemMetaData metaData, object item, bool skipNullValues)
     {
         return new PutItemRequest
         {
             TableName = metaData.TableName,
-            Item = BuildUpsertAttributes(metaData, item)
+            Item = BuildUpsertAttributes(metaData, item, skipNullValues)
         };
     }
 
@@ -587,7 +574,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         };
     }
 
-    private Dictionary<string,  AttributeValue> BuildUpsertAttributes(DynamoDbItemMetaData metaData, object item)
+    private Dictionary<string,  AttributeValue> BuildUpsertAttributes(DynamoDbItemMetaData metaData, object item, bool skipNullValues)
     {
         var result = new Dictionary<string, AttributeValue>();
 
@@ -603,7 +590,12 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
             var attValue = BuildAttributeValue(prop, value);
 
-            if (attValue == null) continue;
+            if (attValue == null)
+            {
+                if(skipNullValues) continue;
+
+                attValue = new AttributeValue();
+            }
 
             result[prop.ColumnName] = attValue;
         }
@@ -698,7 +690,7 @@ public record TransactCreateItemRequest(object Item) : WriteItemRequest;
 
 public record TransactUpdateItemRequest(object Item, bool SkipNullValue) : WriteItemRequest;
 
-public record TransactUpsertItemRequest(object Item) : WriteItemRequest;
+public record TransactUpsertItemRequest(object Item, bool SkipNullValue) : WriteItemRequest;
 
 public record TransactIncrementRequest : WriteItemRequest
 {

@@ -26,13 +26,15 @@ public interface IDynamoDbWrapper
     /// <param name="ct"></param>
     /// <returns></returns>
     Task WriteItemsInTransaction(IEnumerable<WriteItemRequest> requests, CancellationToken ct = default);
+
     /// <summary>
     /// Create a new item if doesn't exist, otherwise just update the item.
     /// </summary>
     /// <param name="item"></param>
+    /// <param name="skipNullValues"></param>
     /// <param name="ct"></param>
     /// <returns></returns>
-    Task Upsert(object item, CancellationToken ct = default);
+    Task Upsert(object item, bool skipNullValues = true, CancellationToken ct = default);
     /// <summary>
     /// Create a new item. If an item with same key already exists then ignore.
     /// </summary>
