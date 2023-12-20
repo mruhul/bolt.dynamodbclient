@@ -29,11 +29,11 @@ public class FluentTransaction
         return this;
     }
 
-    public FluentTransaction Upsert<T>(T item)
+    public FluentTransaction Upsert<T>(T item, bool skipNullValue = true)
     {
         if (item is null) throw new ArgumentNullException(nameof(item));
 
-        _requests.Add(new TransactUpsertItemRequest(item));
+        _requests.Add(new TransactUpsertItemRequest(item, skipNullValue));
 
         return this;
     }
