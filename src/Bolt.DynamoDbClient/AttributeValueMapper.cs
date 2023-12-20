@@ -40,6 +40,8 @@ internal static class AttributeValueMapper
 
     public static object? MapTo(Type type, AttributeValue attr, int level = 0)
     {
+        if (attr.NULL) return null;
+        
         if (IsString(type)) return attr.S;
         if (IsGuid(type)) return new Guid(attr.S);
         if (IsEnum(type)) return Enum.Parse(type, attr.S);
@@ -75,6 +77,7 @@ internal static class AttributeValueMapper
 
     private static object? MapToCollection(Type type, Type? elementType, AttributeValue attr)
     {
+        if (attr.NULL) return null;
         if(elementType == null) return null;
 
         var listType = typeof(List<>).MakeGenericType(elementType);
@@ -172,7 +175,7 @@ internal static class AttributeValueMapper
 
     public static object? MapToDictionary(Type type, AttributeValue attr)
     {
-        if(attr.M == null) return null;
+        if(attr.M == null || attr.NULL) return null;
 
         var keyValueTypes = type.GetGenericArguments();
         if (keyValueTypes.Length != 2) return null;
@@ -195,7 +198,7 @@ internal static class AttributeValueMapper
 
     private static object? MapToObject(Type type, AttributeValue attr)
     {
-        if(attr.M == null) return null;
+        if(attr.M == null || attr.NULL) return null;
 
         var metaData = DynamoDbItemMetaDataReader.Get(type);
 
@@ -234,6 +237,8 @@ internal static class AttributeValueMapper
 
     private static object? MapToArray(Type type, AttributeValue attr)
     {
+        if (attr.NULL) return null;
+        
         var elementType = type.GetElementType();
 
         if(elementType == null) return null;
@@ -294,7 +299,7 @@ internal static class AttributeValueMapper
 
     private static object? MapToObjectArray(Type elementType, AttributeValue attr)
     {
-        if (attr.L == null) return null;
+        if (attr.L == null || attr.NULL) return null;
 
         var collection = Array.CreateInstance(elementType, attr.L.Count);
 
@@ -310,7 +315,7 @@ internal static class AttributeValueMapper
 
     private static object? MapToStringArray(Type elementType, AttributeValue attr, Func<string, object> getValueFromString)
     {
-        if (attr.SS == null) return null;
+        if (attr.SS == null || attr.NULL) return null;
 
         var collection = Array.CreateInstance(elementType, attr.SS.Count);
 
@@ -326,7 +331,7 @@ internal static class AttributeValueMapper
 
     private static object? MapToNumericArray(Type elementType, AttributeValue attr, Func<string, object> getValueFromString)
     {
-        if (attr.NS == null) return null;
+        if (attr.NS == null || attr.NULL) return null;
 
         var collection = Array.CreateInstance(elementType, attr.NS.Count);
 
