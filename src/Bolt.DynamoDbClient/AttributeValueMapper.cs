@@ -7,7 +7,6 @@ internal static class AttributeValueMapper
 {
     private static bool IsString(Type type) => type == typeof(string);
     private static bool IsGuid(Type type) => type == typeof(Guid) || type == typeof(Guid?);
-    private static bool IsEnum(Type type) => type == typeof(Enum);
     private static bool IsBool(Type type) => type == typeof(bool) || type == typeof(bool?);
     private static bool IsInt(Type type) => type == typeof(int) || type == typeof(int?);
     private static bool IsLong(Type type) => type == typeof(long) || type == typeof(long?);
@@ -44,7 +43,7 @@ internal static class AttributeValueMapper
         
         if (IsString(type)) return attr.S;
         if (IsGuid(type)) return new Guid(attr.S);
-        if (IsEnum(type)) return Enum.Parse(type, attr.S);
+        if (type.IsEnum) return Enum.Parse(type, attr.S);
         if (IsDateTime(type)) return GetDateTime(attr);
         if (IsDateTimeOffset(type)) return GetDateTimeOffset(attr);
         if (IsInt(type)) return int.Parse(attr.N);
@@ -263,7 +262,7 @@ internal static class AttributeValueMapper
             return MapToStringArray(elementType, attr, (val) => ParseDateTimeOffset(val));
         }
 
-        if (IsEnum(elementType))
+        if (elementType.IsEnum)
         {
             return MapToStringArray(elementType, attr, (val) => Enum.Parse(elementType, val));
         }
