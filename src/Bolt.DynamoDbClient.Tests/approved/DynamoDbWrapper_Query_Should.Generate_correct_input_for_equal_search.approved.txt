@@ -7,7 +7,8 @@
         "title": "book-title",
         "publishedAt": "2022-12-31T13:00:00Z",
         "price": 100.34,
-        "identifier": "8359fc3f-b5ee-4622-9993-2b5cfae03a1e"
+        "identifier": "8359fc3f-b5ee-4622-9993-2b5cfae03a1e",
+        "publishStatus": "Draft"
       }
     ],
     "count": 1,
@@ -52,7 +53,7 @@
     "keyConditionExpression": "#PK = :PK and #SK = :SK",
     "keyConditions": {},
     "limit": 50,
-    "projectionExpression": "PK, SK, Title, PublishedAt, Price, Identifier",
+    "projectionExpression": "PK, SK, Title, PublishedAt, Price, Identifier, PublishStatus",
     "queryFilter": {},
     "scanIndexForward": false,
     "tableName": "test-store"

@@ -29,7 +29,8 @@
       "#BoolValue": "BoolValue",
       "#BoolNullableValue": "BoolNullableValue",
       "#SubRecords": "SubRecords",
-      "#SubRecordsMap": "SubRecordsMap"
+      "#SubRecordsMap": "SubRecordsMap",
+      "#SampleType": "SampleType"
     },
     "expressionAttributeValues": {
       ":StringValue": {
@@ -545,6 +546,19 @@
         "ns": [],
         "null": false,
         "ss": []
+      },
+      ":SampleType": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "Simple",
+        "ss": []
       }
     },
     "key": {
@@ -576,6 +590,6 @@
       }
     },
     "tableName": "test-store",
-    "updateExpression": "SET #StringValue = :StringValue, #NullableStringValue = :NullableStringValue, #IntValue = :IntValue, #IntNullableValue = :IntNullableValue, #LongValue = :LongValue, #LongNullableValue = :LongNullableValue, #DecimalValue = :DecimalValue, #DecimalNullableValue = :DecimalNullableValue, #DoubleValue = :DoubleValue, #DoubleNullableValue = :DoubleNullableValue, #FloatValue = :FloatValue, #FloatNullableValue = :FloatNullableValue, #GuidValue = :GuidValue, #GuildNullableValue = :GuildNullableValue, #DateTimeValue = :DateTimeValue, #NullableDateTimeValue = :NullableDateTimeValue, #ArrayValue = :ArrayValue, #InCollectionValue = :InCollectionValue, #GuidCollectionValue = :GuidCollectionValue, #DoubleCollectionValue = :DoubleCollectionValue, #SubRecordValue = :SubRecordValue, #BoolValue = :BoolValue, #BoolNullableValue = :BoolNullableValue, #SubRecords = :SubRecords, #SubRecordsMap = :SubRecordsMap"
+    "updateExpression": "SET #StringValue = :StringValue, #NullableStringValue = :NullableStringValue, #IntValue = :IntValue, #IntNullableValue = :IntNullableValue, #LongValue = :LongValue, #LongNullableValue = :LongNullableValue, #DecimalValue = :DecimalValue, #DecimalNullableValue = :DecimalNullableValue, #DoubleValue = :DoubleValue, #DoubleNullableValue = :DoubleNullableValue, #FloatValue = :FloatValue, #FloatNullableValue = :FloatNullableValue, #GuidValue = :GuidValue, #GuildNullableValue = :GuildNullableValue, #DateTimeValue = :DateTimeValue, #NullableDateTimeValue = :NullableDateTimeValue, #ArrayValue = :ArrayValue, #InCollectionValue = :InCollectionValue, #GuidCollectionValue = :GuidCollectionValue, #DoubleCollectionValue = :DoubleCollectionValue, #SubRecordValue = :SubRecordValue, #BoolValue = :BoolValue, #BoolNullableValue = :BoolNullableValue, #SubRecords = :SubRecords, #SubRecordsMap = :SubRecordsMap, #SampleType = :SampleType"
   }
 }

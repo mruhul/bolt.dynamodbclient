@@ -25,4 +25,12 @@ public record BookDbRecord
     public DateTime? PublishedAt { get; init; }
     public decimal Price { get; init; }
     public Guid? Identifier { get; init; }
+    public PublishStatus PublishStatus { get; init; }
+}
+
+public enum PublishStatus
+{
+    Published,
+    Draft,
+    Discontinued
 }

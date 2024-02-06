@@ -55,6 +55,9 @@ public class DynamoDbWrapper_Query_Should
                         ["PublishedAt"] = new AttributeValue
                         {
                             S = "2022-12-31T13:00:00Z".ToUtcDateTime().FormatAsUtc()
+                        },
+                        ["PublishStatus"] = new(){
+                            S = "Draft"
                         }
                     }
                 }

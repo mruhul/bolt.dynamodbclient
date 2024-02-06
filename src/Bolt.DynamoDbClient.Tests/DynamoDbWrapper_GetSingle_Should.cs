@@ -54,7 +54,11 @@ public class DynamoDbWrapper_GetSingle_Should
                     ["DateTimeValue"] = new() { S = "2023-02-24T05:46:17.5148201Z" },
                     ["GuildNullableValue"] = new() { S = "051c1572-eb64-45b4-bb1e-b624b5b10136" },
                     ["InCollectionValue"] = new() { NS = new() { "3","2","1"} },
-                    ["GuidCollectionValue"] = new() { SS = new() { "01626357-e80b-484b-a653-91f6d52589b8", "051c1572-eb64-45b4-bb1e-b624b5b10136" } }
+                    ["GuidCollectionValue"] = new() { SS = new() { "01626357-e80b-484b-a653-91f6d52589b8", "051c1572-eb64-45b4-bb1e-b624b5b10136" } },
+                    ["SampleType"] = new()
+                    {
+                        S = "Simple"
+                    }
                 }
             })
             .AndDoes(c =>

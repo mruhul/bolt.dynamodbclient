@@ -35,10 +35,18 @@ public record ComplexRecord
 
     public SubRecord[] SubRecords { get; init; }
     public Dictionary<string, SubRecord> SubRecordsMap { get; init; }
+    
+    public SampleType SampleType { get; init; }
 }
 
 public record SubRecord
 {
     public string Title { get; init; }
     public int Age { get; init; }
+}
+
+public enum SampleType
+{
+    Simple,
+    Complex
 }

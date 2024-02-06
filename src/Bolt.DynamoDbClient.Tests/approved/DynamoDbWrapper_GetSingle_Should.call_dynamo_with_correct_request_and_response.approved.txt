@@ -73,6 +73,7 @@
       "title": "hello",
       "age": 3
     },
-    "boolValue": false
+    "boolValue": false,
+    "sampleType": "Simple"
   }
 }

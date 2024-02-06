@@ -484,6 +484,19 @@
         "ns": [],
         "null": false,
         "ss": []
+      },
+      "SampleType": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "Simple",
+        "ss": []
       }
     },
     "tableName": "test-store"

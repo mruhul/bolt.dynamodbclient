@@ -29,7 +29,8 @@
       "#BoolValue": "BoolValue",
       "#BoolNullableValue": "BoolNullableValue",
       "#SubRecords": "SubRecords",
-      "#SubRecordsMap": "SubRecordsMap"
+      "#SubRecordsMap": "SubRecordsMap",
+      "#SampleType": "SampleType"
     },
     "expressionAttributeValues": {
       ":StringValue": {
@@ -480,6 +481,19 @@
         "ns": [],
         "null": false,
         "ss": []
+      },
+      ":SampleType": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "ns": [],
+        "null": false,
+        "s": "Complex",
+        "ss": []
       }
     },
     "key": {
@@ -511,6 +525,6 @@
       }
     },
     "tableName": "test-store",
-    "updateExpression": "SET #StringValue = :StringValue, #IntValue = :IntValue, #LongValue = :LongValue, #LongNullableValue = :LongNullableValue, #DecimalValue = :DecimalValue, #DoubleValue = :DoubleValue, #DoubleNullableValue = :DoubleNullableValue, #FloatValue = :FloatValue, #GuidValue = :GuidValue, #DateTimeValue = :DateTimeValue, #NullableDateTimeValue = :NullableDateTimeValue, #ArrayValue = :ArrayValue, #InCollectionValue = :InCollectionValue, #GuidCollectionValue = :GuidCollectionValue, #DoubleCollectionValue = :DoubleCollectionValue, #SubRecordValue = :SubRecordValue, #BoolValue = :BoolValue, #BoolNullableValue = :BoolNullableValue, #SubRecords = :SubRecords, #SubRecordsMap = :SubRecordsMap REMOVE #NullableStringValue, #IntNullableValue, #DecimalNullableValue, #FloatNullableValue, #GuildNullableValue"
+    "updateExpression": "SET #StringValue = :StringValue, #IntValue = :IntValue, #LongValue = :LongValue, #LongNullableValue = :LongNullableValue, #DecimalValue = :DecimalValue, #DoubleValue = :DoubleValue, #DoubleNullableValue = :DoubleNullableValue, #FloatValue = :FloatValue, #GuidValue = :GuidValue, #DateTimeValue = :DateTimeValue, #NullableDateTimeValue = :NullableDateTimeValue, #ArrayValue = :ArrayValue, #InCollectionValue = :InCollectionValue, #GuidCollectionValue = :GuidCollectionValue, #DoubleCollectionValue = :DoubleCollectionValue, #SubRecordValue = :SubRecordValue, #BoolValue = :BoolValue, #BoolNullableValue = :BoolNullableValue, #SubRecords = :SubRecords, #SubRecordsMap = :SubRecordsMap, #SampleType = :SampleType REMOVE #NullableStringValue, #IntNullableValue, #DecimalNullableValue, #FloatNullableValue, #GuildNullableValue"
   }
 }

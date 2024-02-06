@@ -1,24 +1,19 @@
 ﻿{
-  "key": "1",
-  "scenario": "When all value provided",
+  "key": "2",
+  "scenario": "When nullable are empty",
   "gotRequest": {
     "attributeUpdates": {},
     "expected": {},
     "expressionAttributeNames": {
       "#StringValue": "StringValue",
-      "#NullableStringValue": "NullableStringValue",
       "#IntValue": "IntValue",
-      "#IntNullableValue": "IntNullableValue",
       "#LongValue": "LongValue",
       "#LongNullableValue": "LongNullableValue",
       "#DecimalValue": "DecimalValue",
-      "#DecimalNullableValue": "DecimalNullableValue",
       "#DoubleValue": "DoubleValue",
       "#DoubleNullableValue": "DoubleNullableValue",
       "#FloatValue": "FloatValue",
-      "#FloatNullableValue": "FloatNullableValue",
       "#GuidValue": "GuidValue",
-      "#GuildNullableValue": "GuildNullableValue",
       "#DateTimeValue": "DateTimeValue",
       "#NullableDateTimeValue": "NullableDateTimeValue",
       "#ArrayValue": "ArrayValue",
@@ -29,8 +24,7 @@
       "#BoolValue": "BoolValue",
       "#BoolNullableValue": "BoolNullableValue",
       "#SubRecords": "SubRecords",
-      "#SubRecordsMap": "SubRecordsMap",
-      "#SampleType": "SampleType"
+      "#SubRecordsMap": "SubRecordsMap"
     },
     "expressionAttributeValues": {
       ":StringValue": {
@@ -46,19 +40,6 @@
         "s": "hello",
         "ss": []
       },
-      ":NullableStringValue": {
-        "bool": false,
-        "isBOOLSet": false,
-        "bs": [],
-        "l": [],
-        "isLSet": false,
-        "m": {},
-        "isMSet": false,
-        "ns": [],
-        "null": false,
-        "s": "world!",
-        "ss": []
-      },
       ":IntValue": {
         "bool": false,
         "isBOOLSet": false,
@@ -68,19 +49,6 @@
         "m": {},
         "isMSet": false,
         "n": "3",
-        "ns": [],
-        "null": false,
-        "ss": []
-      },
-      ":IntNullableValue": {
-        "bool": false,
-        "isBOOLSet": false,
-        "bs": [],
-        "l": [],
-        "isLSet": false,
-        "m": {},
-        "isMSet": false,
-        "n": "2",
         "ns": [],
         "null": false,
         "ss": []
@@ -124,19 +92,6 @@
         "null": false,
         "ss": []
       },
-      ":DecimalNullableValue": {
-        "bool": false,
-        "isBOOLSet": false,
-        "bs": [],
-        "l": [],
-        "isLSet": false,
-        "m": {},
-        "isMSet": false,
-        "n": "200",
-        "ns": [],
-        "null": false,
-        "ss": []
-      },
       ":DoubleValue": {
         "bool": false,
         "isBOOLSet": false,
@@ -176,19 +131,6 @@
         "null": false,
         "ss": []
       },
-      ":FloatNullableValue": {
-        "bool": false,
-        "isBOOLSet": false,
-        "bs": [],
-        "l": [],
-        "isLSet": false,
-        "m": {},
-        "isMSet": false,
-        "n": "2",
-        "ns": [],
-        "null": false,
-        "ss": []
-      },
       ":GuidValue": {
         "bool": false,
         "isBOOLSet": false,
@@ -200,19 +142,6 @@
         "ns": [],
         "null": false,
         "s": "01626357-e80b-484b-a653-91f6d52589b8",
-        "ss": []
-      },
-      ":GuildNullableValue": {
-        "bool": false,
-        "isBOOLSet": false,
-        "bs": [],
-        "l": [],
-        "isLSet": false,
-        "m": {},
-        "isMSet": false,
-        "ns": [],
-        "null": false,
-        "s": "051c1572-eb64-45b4-bb1e-b624b5b10136",
         "ss": []
       },
       ":DateTimeValue": {
@@ -546,19 +475,6 @@
         "ns": [],
         "null": false,
         "ss": []
-      },
-      ":SampleType": {
-        "bool": false,
-        "isBOOLSet": false,
-        "bs": [],
-        "l": [],
-        "isLSet": false,
-        "m": {},
-        "isMSet": false,
-        "ns": [],
-        "null": false,
-        "s": "Simple",
-        "ss": []
       }
     },
     "key": {
@@ -590,6 +506,6 @@
       }
     },
     "tableName": "test-store",
-    "updateExpression": "SET #StringValue = :StringValue, #NullableStringValue = :NullableStringValue, #IntValue = :IntValue, #IntNullableValue = :IntNullableValue, #LongValue = :LongValue, #LongNullableValue = :LongNullableValue, #DecimalValue = :DecimalValue, #DecimalNullableValue = :DecimalNullableValue, #DoubleValue = :DoubleValue, #DoubleNullableValue = :DoubleNullableValue, #FloatValue = :FloatValue, #FloatNullableValue = :FloatNullableValue, #GuidValue = :GuidValue, #GuildNullableValue = :GuildNullableValue, #DateTimeValue = :DateTimeValue, #NullableDateTimeValue = :NullableDateTimeValue, #ArrayValue = :ArrayValue, #InCollectionValue = :InCollectionValue, #GuidCollectionValue = :GuidCollectionValue, #DoubleCollectionValue = :DoubleCollectionValue, #SubRecordValue = :SubRecordValue, #BoolValue = :BoolValue, #BoolNullableValue = :BoolNullableValue, #SubRecords = :SubRecords, #SubRecordsMap = :SubRecordsMap, #SampleType = :SampleType"
+    "updateExpression": "SET #StringValue = :StringValue, #IntValue = :IntValue, #LongValue = :LongValue, #LongNullableValue = :LongNullableValue, #DecimalValue = :DecimalValue, #DoubleValue = :DoubleValue, #DoubleNullableValue = :DoubleNullableValue, #FloatValue = :FloatValue, #GuidValue = :GuidValue, #DateTimeValue = :DateTimeValue, #NullableDateTimeValue = :NullableDateTimeValue, #ArrayValue = :ArrayValue, #InCollectionValue = :InCollectionValue, #GuidCollectionValue = :GuidCollectionValue, #DoubleCollectionValue = :DoubleCollectionValue, #SubRecordValue = :SubRecordValue, #BoolValue = :BoolValue, #BoolNullableValue = :BoolNullableValue, #SubRecords = :SubRecords, #SubRecordsMap = :SubRecordsMap"
   }
 }

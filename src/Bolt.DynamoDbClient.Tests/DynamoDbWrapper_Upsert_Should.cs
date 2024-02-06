@@ -87,6 +87,7 @@ namespace Bolt.DynamoDbClient.Tests
                     GuildNullableValue = null,
                     IntNullableValue= null,
                     NullableStringValue = null,
+                    SampleType = SampleType.Complex
                 }
             },
         }.ToTestData();
