@@ -372,14 +372,14 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
         var metaData = DynamoDbItemMetaDataReader.Get(request.ItemType);
 
-        var paritionKeyAtt = metaData.PartitionKeyProperty != null
+        var partitionKeyAtt = metaData.PartitionKeyProperty != null
                                 ? BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, request.PartitionKey)
                                 : null;
         var sortKeyAtt = metaData.SortKeyProperty != null
                             ? BuildAttributeValue(metaData.SortKeyProperty.PropertyType, request.SortKey)
                             : null;
 
-        if (paritionKeyAtt == null || sortKeyAtt == null) return null;
+        if (partitionKeyAtt == null || sortKeyAtt == null) return null;
 
         var propertyAlias = $"#{request.PropertyName}";
 
@@ -389,13 +389,14 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             {
                 TableName = metaData.TableName,
                 Key = BuildKeyAttributeValues(metaData, request.PartitionKey, request.SortKey),
-                UpdateExpression = $"SET {propertyAlias} = {propertyAlias} + :incr",
+                UpdateExpression = $"SET {propertyAlias} = if_not_exists({propertyAlias}, :start) + :incr",
                 ExpressionAttributeNames = new Dictionary<string, string>
                 {
                     {propertyAlias, request.PropertyName}
                 },
                 ExpressionAttributeValues = new Dictionary<string, AttributeValue>
                 {
+                    {":start", new AttributeValue { N = "0" } },
                     {":incr", new AttributeValue{ N = request.IncrementBy.ToString() } }
                 }
             }
