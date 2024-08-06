@@ -238,9 +238,10 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             },
             ExpressionAttributeValues = new Dictionary<string, AttributeValue>
             {
+                {":start", new AttributeValue { N = "0" } },
                 {":incr", new AttributeValue{ N = request.IncrementBy.ToString() } }
             },
-            UpdateExpression = $"SET {propertyAlias} = {propertyAlias} + :incr",
+            UpdateExpression = $"SET {propertyAlias} = if_not_exists({propertyAlias}, :start) + :incr",
         }, ct);
     }
 
