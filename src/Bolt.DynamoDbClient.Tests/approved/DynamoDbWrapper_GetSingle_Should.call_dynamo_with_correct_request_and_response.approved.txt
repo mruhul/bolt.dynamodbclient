@@ -8,27 +8,33 @@
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "pk1",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "SK": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "sk1",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       }
     },
     "tableName": "test-store"

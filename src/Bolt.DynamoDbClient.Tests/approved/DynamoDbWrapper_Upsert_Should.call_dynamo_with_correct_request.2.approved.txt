@@ -10,190 +10,233 @@
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "complex-1",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "SK": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "complex-sk-1",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "StringValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "hello",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "IntValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "n": "3",
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "LongValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "n": "3000",
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "LongNullableValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "n": "2000",
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "DecimalValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "n": "300",
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "DoubleValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "n": "300",
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "DoubleNullableValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "n": "200",
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "FloatValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "n": "3",
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "GuidValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "01626357-e80b-484b-a653-91f6d52589b8",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "DateTimeValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "2023-02-24T05:46:17.5148201Z",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "NullableDateTimeValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "2023-03-24T05:46:17.5148201Z",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "ArrayValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "ss": [
           "value1",
           "value2"
-        ]
+        ],
+        "isSSSet": true
       },
       "InCollectionValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
@@ -203,28 +246,34 @@
           "2",
           "3"
         ],
+        "isNSSet": true,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "GuidCollectionValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "ss": [
           "01626357-e80b-484b-a653-91f6d52589b8",
           "051c1572-eb64-45b4-bb1e-b624b5b10136"
-        ]
+        ],
+        "isSSSet": true
       },
       "DoubleCollectionValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
@@ -233,13 +282,16 @@
           "1.2",
           "3.4"
         ],
+        "isNSSet": true,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "SubRecordValue": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {
@@ -247,67 +299,83 @@
             "bool": false,
             "isBOOLSet": false,
             "bs": [],
+            "isBSSet": false,
             "l": [],
             "isLSet": false,
             "m": {},
             "isMSet": false,
             "ns": [],
+            "isNSSet": false,
             "null": false,
             "s": "hello",
-            "ss": []
+            "ss": [],
+            "isSSSet": false
           },
           "Age": {
             "bool": false,
             "isBOOLSet": false,
             "bs": [],
+            "isBSSet": false,
             "l": [],
             "isLSet": false,
             "m": {},
             "isMSet": false,
             "n": "16",
             "ns": [],
+            "isNSSet": false,
             "null": false,
-            "ss": []
+            "ss": [],
+            "isSSSet": false
           }
         },
         "isMSet": true,
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "BoolValue": {
         "bool": true,
         "isBOOLSet": true,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "BoolNullableValue": {
         "bool": true,
         "isBOOLSet": true,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "SubRecords": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [
           {
             "bool": false,
             "isBOOLSet": false,
             "bs": [],
+            "isBSSet": false,
             "l": [],
             "isLSet": false,
             "m": {
@@ -315,38 +383,47 @@
                 "bool": false,
                 "isBOOLSet": false,
                 "bs": [],
+                "isBSSet": false,
                 "l": [],
                 "isLSet": false,
                 "m": {},
                 "isMSet": false,
                 "ns": [],
+                "isNSSet": false,
                 "null": false,
                 "s": "hello",
-                "ss": []
+                "ss": [],
+                "isSSSet": false
               },
               "Age": {
                 "bool": false,
                 "isBOOLSet": false,
                 "bs": [],
+                "isBSSet": false,
                 "l": [],
                 "isLSet": false,
                 "m": {},
                 "isMSet": false,
                 "n": "16",
                 "ns": [],
+                "isNSSet": false,
                 "null": false,
-                "ss": []
+                "ss": [],
+                "isSSSet": false
               }
             },
             "isMSet": true,
             "ns": [],
+            "isNSSet": false,
             "null": false,
-            "ss": []
+            "ss": [],
+            "isSSSet": false
           },
           {
             "bool": false,
             "isBOOLSet": false,
             "bs": [],
+            "isBSSet": false,
             "l": [],
             "isLSet": false,
             "m": {
@@ -354,46 +431,57 @@
                 "bool": false,
                 "isBOOLSet": false,
                 "bs": [],
+                "isBSSet": false,
                 "l": [],
                 "isLSet": false,
                 "m": {},
                 "isMSet": false,
                 "ns": [],
+                "isNSSet": false,
                 "null": false,
                 "s": "world",
-                "ss": []
+                "ss": [],
+                "isSSSet": false
               },
               "Age": {
                 "bool": false,
                 "isBOOLSet": false,
                 "bs": [],
+                "isBSSet": false,
                 "l": [],
                 "isLSet": false,
                 "m": {},
                 "isMSet": false,
                 "n": "18",
                 "ns": [],
+                "isNSSet": false,
                 "null": false,
-                "ss": []
+                "ss": [],
+                "isSSSet": false
               }
             },
             "isMSet": true,
             "ns": [],
+            "isNSSet": false,
             "null": false,
-            "ss": []
+            "ss": [],
+            "isSSSet": false
           }
         ],
         "isLSet": true,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "SubRecordsMap": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {
@@ -401,6 +489,7 @@
             "bool": false,
             "isBOOLSet": false,
             "bs": [],
+            "isBSSet": false,
             "l": [],
             "isLSet": false,
             "m": {
@@ -408,38 +497,47 @@
                 "bool": false,
                 "isBOOLSet": false,
                 "bs": [],
+                "isBSSet": false,
                 "l": [],
                 "isLSet": false,
                 "m": {},
                 "isMSet": false,
                 "ns": [],
+                "isNSSet": false,
                 "null": false,
                 "s": "hello",
-                "ss": []
+                "ss": [],
+                "isSSSet": false
               },
               "Age": {
                 "bool": false,
                 "isBOOLSet": false,
                 "bs": [],
+                "isBSSet": false,
                 "l": [],
                 "isLSet": false,
                 "m": {},
                 "isMSet": false,
                 "n": "16",
                 "ns": [],
+                "isNSSet": false,
                 "null": false,
-                "ss": []
+                "ss": [],
+                "isSSSet": false
               }
             },
             "isMSet": true,
             "ns": [],
+            "isNSSet": false,
             "null": false,
-            "ss": []
+            "ss": [],
+            "isSSSet": false
           },
           "world": {
             "bool": false,
             "isBOOLSet": false,
             "bs": [],
+            "isBSSet": false,
             "l": [],
             "isLSet": false,
             "m": {
@@ -447,52 +545,65 @@
                 "bool": false,
                 "isBOOLSet": false,
                 "bs": [],
+                "isBSSet": false,
                 "l": [],
                 "isLSet": false,
                 "m": {},
                 "isMSet": false,
                 "ns": [],
+                "isNSSet": false,
                 "null": false,
                 "s": "world",
-                "ss": []
+                "ss": [],
+                "isSSSet": false
               },
               "Age": {
                 "bool": false,
                 "isBOOLSet": false,
                 "bs": [],
+                "isBSSet": false,
                 "l": [],
                 "isLSet": false,
                 "m": {},
                 "isMSet": false,
                 "n": "18",
                 "ns": [],
+                "isNSSet": false,
                 "null": false,
-                "ss": []
+                "ss": [],
+                "isSSSet": false
               }
             },
             "isMSet": true,
             "ns": [],
+            "isNSSet": false,
             "null": false,
-            "ss": []
+            "ss": [],
+            "isSSSet": false
           }
         },
         "isMSet": true,
         "ns": [],
+        "isNSSet": false,
         "null": false,
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       },
       "SampleType": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
+        "isBSSet": false,
         "l": [],
         "isLSet": false,
         "m": {},
         "isMSet": false,
         "ns": [],
+        "isNSSet": false,
         "null": false,
         "s": "Complex",
-        "ss": []
+        "ss": [],
+        "isSSSet": false
       }
     },
     "tableName": "test-store"

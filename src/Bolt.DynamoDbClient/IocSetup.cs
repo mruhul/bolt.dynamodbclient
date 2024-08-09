@@ -10,6 +10,7 @@ public static class IocSetup
     {
         options ??= new IocSetupOptions();
         
+        services.TryAddSingleton<IDbRecordMapper,DbRecordMapper>();
         services.TryAddTransient<LocksRepository>();
         services.TryAddTransient<DistributedLock>();
         services.TryAddTransient<LocksRepository>();
