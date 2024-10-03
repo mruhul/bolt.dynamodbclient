@@ -1,4 +1,5 @@
-﻿using Amazon.DynamoDBv2.Model;
+﻿using System.Diagnostics.CodeAnalysis;
+using Amazon.DynamoDBv2.Model;
 using System.Globalization;
 
 namespace Bolt.DynamoDbClient;

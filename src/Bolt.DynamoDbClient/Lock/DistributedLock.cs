@@ -23,7 +23,7 @@ internal sealed class DistributedLock
                 ExpiredAtInUnixTimeSeconds = DateTime.UtcNow.Add(duration).ToUnixTimeSeconds()
             }, ct);
         }
-        catch (ConditionalCheckFailedException e)
+        catch (ConditionalCheckFailedException)
         {
             return false;
         }

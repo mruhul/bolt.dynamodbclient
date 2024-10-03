@@ -6,29 +6,33 @@ namespace Bolt.DynamoDbClient;
 
 internal record DynamoDbItemMetaData
 {
-    public required string TableName { get; init; }
-    public required string PartitionKeyColumnName { get; init; }
-    public required string SortKeyColumnName { get; init; }
-    public required PropertyInfo? PartitionKeyProperty { get; init; }
-    public required PropertyInfo? SortKeyProperty { get; init; }
-    public required DynamoDbItemMetaProperty[] Properties { get; init; }
-    public required TypeInfoMetaData? TypeInfoMetaData { get; init; }
+    public string TableName { get; init; } = string.Empty;
+    public string PartitionKeyColumnName { get; init; } = string.Empty;
+    public string SortKeyColumnName { get; init; } = string.Empty;
+    public PropertyInfo? PartitionKeyProperty { get; init; }
+    public PropertyInfo? SortKeyProperty { get; init; }
+    public DynamoDbItemMetaProperty[] Properties { get; init; } = [];
+    public TypeInfoMetaData? TypeInfoMetaData { get; init; }
 };
 
 internal record DynamoDbItemMetaProperty
 {
-    public DynamoDbItemMetaProperty(PropertyInfo property, 
-        DynamoDbColumnType? columnType, 
-        string? columnName, 
+    public DynamoDbItemMetaProperty(PropertyInfo property,
+        DynamoDbColumnType? columnType,
+        string? columnName,
         DynamoDbOperationIgnoreInstructionType? ignore)
     {
         ColumnType = columnType ?? DynamoDbColumnType.Default;
         PropertyInfo = property;
         IgnoreInstruction = ignore ?? DynamoDbOperationIgnoreInstructionType.Never;
-        ColumnName = columnName ?? PropertyInfo.Name;    
+        ColumnName = columnName ?? PropertyInfo.Name;
+        ProjectionColumnName = DynamoDbReservedWords.IsReserveWord(ColumnName)
+            ? $"#{ColumnName}"
+            : null;
     }
 
     public string ColumnName { get; init; }
+    public string? ProjectionColumnName { get; init; }
     public DynamoDbColumnType ColumnType { get; init; }
     public DynamoDbOperationIgnoreInstructionType IgnoreInstruction { get; init; }
     public PropertyInfo PropertyInfo { get; init; }
@@ -46,6 +50,7 @@ internal static class DynamoDbItemMetaDataReader
 
     private const string DefaultPartitionKeyColumnName = "PK";
     private const string DefaultSortKeyColumnName = "SK";
+
     private static DynamoDbItemMetaData LoadMetaData(Type type)
     {
         var typeName = type.Name;
@@ -103,14 +108,18 @@ internal static class DynamoDbItemMetaDataReader
 
             var isSimpleType = IsSimpleType(prop.PropertyType);
             var isCollection = isSimpleType ? false : typeof(IEnumerable).IsAssignableFrom(prop.PropertyType);
-            
-            properties.Add(new DynamoDbItemMetaProperty(prop, columnType, columnAttr?.Name, ignoreAttr?.Ignore)
+
+            properties.Add(new DynamoDbItemMetaProperty(prop, 
+                columnType, 
+                columnAttr?.Name, 
+                ignoreAttr?.Ignore)
             {
                 TypeMetaData = prop.PropertyType.GetTypeInfo()
             });
         }
 
-        return new DynamoDbItemMetaData {
+        return new DynamoDbItemMetaData
+        {
             TableName = tableAtt?.Name ?? type.Name,
             PartitionKeyProperty = partitionKeyProp,
             PartitionKeyColumnName = partitionKeyColumnName ?? DefaultPartitionKeyColumnName,
@@ -139,26 +148,26 @@ internal static class DynamoDbItemMetaDataReader
     private static bool IsSimpleType(Type type)
     {
         return type == typeof(string)
-            || type == typeof(int)
-            || type == typeof(decimal)
-            || type == typeof(double)
-            || type == typeof(float)
-            || type == typeof(long)
-            || type == typeof(DateTime)
-            || type == typeof(DateTimeOffset)
-            || type == typeof(bool)
-            || type == typeof(TimeSpan)
-            || type == typeof(Guid)
-            || type == typeof(int?)
-            || type == typeof(decimal?)
-            || type == typeof(double?)
-            || type == typeof(float?)
-            || type == typeof(long?)
-            || type == typeof(DateTime?)
-            || type == typeof(DateTimeOffset?)
-            || type == typeof(bool?)
-            || type == typeof(TimeSpan?)
-            || type == typeof(Guid?);
+               || type == typeof(int)
+               || type == typeof(decimal)
+               || type == typeof(double)
+               || type == typeof(float)
+               || type == typeof(long)
+               || type == typeof(DateTime)
+               || type == typeof(DateTimeOffset)
+               || type == typeof(bool)
+               || type == typeof(TimeSpan)
+               || type == typeof(Guid)
+               || type == typeof(int?)
+               || type == typeof(decimal?)
+               || type == typeof(double?)
+               || type == typeof(float?)
+               || type == typeof(long?)
+               || type == typeof(DateTime?)
+               || type == typeof(DateTimeOffset?)
+               || type == typeof(bool?)
+               || type == typeof(TimeSpan?)
+               || type == typeof(Guid?);
     }
 }
 
@@ -166,7 +175,7 @@ public class DynamoDbTableAttribute : Attribute
 {
     public DynamoDbTableAttribute(string name)
     {
-        Name = name;    
+        Name = name;
     }
 
     public string Name { get; private set; }
@@ -184,7 +193,9 @@ public class DynamoDbColumnAttribute : Attribute
 
 public class DynamoDbPartitionKeyAttribute : Attribute
 {
-    public DynamoDbPartitionKeyAttribute() { }
+    public DynamoDbPartitionKeyAttribute()
+    {
+    }
 
     public DynamoDbPartitionKeyAttribute(string name)
     {
@@ -221,7 +232,6 @@ public class DynamoDbOperationIgnoreAttribute : Attribute
 
     public DynamoDbOperationIgnoreInstructionType Ignore { get; private set; }
 }
-
 
 public enum DynamoDbOperationIgnoreInstructionType
 {

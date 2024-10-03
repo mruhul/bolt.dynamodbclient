@@ -1,4 +1,5 @@
-﻿using Amazon.DynamoDBv2;
+﻿using System.ComponentModel;
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using System.Text;
 using Bolt.DynamoDbClient.Lock;
@@ -20,6 +21,8 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
     {
         var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
 
+        var attributeNames = request.ExpressionAttributeNames;
+        
         string? projectedExpression = request.ProjectionExpression;
         if(string.IsNullOrWhiteSpace(projectedExpression))
         {
@@ -28,15 +31,22 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             var firstItem = true;
             foreach(var prop in metaData.Properties)
             {
+                if (prop.ProjectionColumnName != null)
+                {
+                    attributeNames ??= new Dictionary<string, string>();
+
+                    attributeNames[prop.ProjectionColumnName] = prop.ColumnName;
+                }
+                
                 if (firstItem)
                 {
                     firstItem = false;
 
-                    projectionExpressionSb.Append(prop.ColumnName);
+                    projectionExpressionSb.Append(prop.ProjectionColumnName ?? prop.ColumnName);
                 }
                 else
                 {
-                    projectionExpressionSb.Append(", ").Append(prop.ColumnName);
+                    projectionExpressionSb.Append(", ").Append(prop.ProjectionColumnName ?? prop.ColumnName);
                 }                
             }
 
@@ -52,7 +62,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             IndexName = request.IndexName,
             TableName = metaData.TableName,
             KeyConditionExpression = request.KeyConditionExpression,
-            ExpressionAttributeNames = request.ExpressionAttributeNames,
+            ExpressionAttributeNames = attributeNames,
             ExpressionAttributeValues = request.ExpressionAttributeValues,
             Limit = request.Limit ?? 50,
             ScanIndexForward = request.ScanIndexForward ?? false
@@ -222,7 +232,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
     public async Task Increment<T>(IncrementRequest request, CancellationToken ct)
     {
-        ArgumentNullException.ThrowIfNull(request, nameof(request));
+        Ensure.ThrowIfNull(request, nameof(request));
 
         var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
 
@@ -289,7 +299,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
     {
         var rsp = await _db.QueryAsync(request, ct);
 
-        return rsp.Items.Select(x => x.MapTo<T>());
+        return rsp.Items?.Select(x => x.MapTo<T>()!) ?? Enumerable.Empty<T>();
     }
 
     private TransactWriteItem? BuildTransactWriteItem(WriteItemRequest request)
@@ -368,7 +378,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
     private TransactWriteItem? BuildTransactionWriteItem(TransactIncrementRequest request)
     {
-        ArgumentNullException.ThrowIfNull(request, nameof(request));
+        Ensure.ThrowIfNull(request, nameof(request));
 
         var metaData = DynamoDbItemMetaDataReader.Get(request.ItemType);
 
@@ -679,11 +689,11 @@ public record DeleteSingleItemRequest(object partitionKey, object sortKey);
 
 public record GetSingleItemRequest(object PartitionKey, object SortKey);
 
-public record IncrementRequest 
-{ 
-    public required object PartitionKey { get; init; }
-    public required object SortKey { get; init; }
-    public required string PropertyName { get; init; }
+public record IncrementRequest
+{
+    public object PartitionKey { get; init; } = string.Empty;
+    public object SortKey { get; init; } = string.Empty;
+    public string PropertyName { get; init; } = string.Empty;
     public int IncrementBy { get; init; } = 1;
 }
 
@@ -699,10 +709,10 @@ public record TransactUpsertItemRequest(object Item, bool SkipNullValue) : Write
 
 public record TransactIncrementRequest : WriteItemRequest
 {
-    public required Type ItemType { get; init; }
-    public required object PartitionKey { get; init; }
-    public required object SortKey { get; init; }
-    public required string PropertyName { get; init; }
+    public Type ItemType { get; init; } = null!;
+    public object PartitionKey { get; init; } = string.Empty;
+    public object SortKey { get; init; } = string.Empty;
+    public string PropertyName { get; init; } = string.Empty;
     public int IncrementBy { get; init; } = 1;
 }
 

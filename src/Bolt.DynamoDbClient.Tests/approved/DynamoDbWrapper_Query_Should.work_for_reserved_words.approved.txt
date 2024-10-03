@@ -1,0 +1,51 @@
+﻿{
+  "attributesToGet": [],
+  "consistentRead": false,
+  "expressionAttributeNames": {
+    "#SK": "SK",
+    "#PK": "PK",
+    "#Name": "Name"
+  },
+  "expressionAttributeValues": {
+    ":PK": {
+      "bool": false,
+      "isBOOLSet": false,
+      "bs": [],
+      "isBSSet": false,
+      "l": [],
+      "isLSet": false,
+      "m": {},
+      "isMSet": false,
+      "ns": [],
+      "isNSSet": false,
+      "null": false,
+      "s": "item-1",
+      "ss": [],
+      "isSSSet": false
+    },
+    ":SK": {
+      "bool": false,
+      "isBOOLSet": false,
+      "bs": [],
+      "isBSSet": false,
+      "l": [],
+      "isLSet": false,
+      "m": {},
+      "isMSet": false,
+      "ns": [],
+      "isNSSet": false,
+      "null": false,
+      "s": "item-details",
+      "ss": [],
+      "isSSSet": false
+    }
+  },
+  "keyConditionExpression": "#PK = :PK and #SK = :SK",
+  "keyConditions": {},
+  "limit": 50,
+  "isLimitSet": true,
+  "projectionExpression": "PK, SK, #Name",
+  "queryFilter": {},
+  "scanIndexForward": false,
+  "tableName": "TestRecordWithReservedWord"
+}

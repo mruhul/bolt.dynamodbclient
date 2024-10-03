@@ -19,7 +19,7 @@ internal sealed partial class FluentQuery : IDynamoDbFetchData
         {
             sortKeyColumnName = string.IsNullOrWhiteSpace(_sortKeyColumnName) ? metaData.SortKeyColumnName : _sortKeyColumnName;
             sortKeyExpression = BuildSortKeyExpression(_operatorType, sortKeyColumnName ?? string.Empty);
-            expressionAttributeNames[$"#{sortKeyColumnName}"] = sortKeyColumnName;
+            expressionAttributeNames[$"#{sortKeyColumnName}"] = sortKeyColumnName ?? string.Empty;
         }
         var partitionKeyExpression = string.Format("#{0} = :{0}", partitionKeyColumnName);
 

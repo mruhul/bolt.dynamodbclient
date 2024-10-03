@@ -6,7 +6,9 @@ namespace Bolt.DynamoDbClient;
 
 public static class IocSetup
 {
-    public static IServiceCollection AddBoltDynamoDbClient(this IServiceCollection services, IocSetupOptions? options = null)
+    public static IServiceCollection AddBoltDynamoDbClient(
+        this IServiceCollection services, 
+        IocSetupOptions? options = null)
     {
         options ??= new IocSetupOptions();
         

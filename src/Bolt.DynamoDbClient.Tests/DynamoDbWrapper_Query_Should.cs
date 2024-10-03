@@ -1,4 +1,5 @@
-﻿using Amazon.DynamoDBv2;
+﻿using System.Net;
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Bolt.Common.Extensions;
 using Bolt.DynamoDbClient.Tests.Builders;
@@ -75,5 +76,50 @@ public class DynamoDbWrapper_Query_Should
             gotRequest
         }.ShouldMatchApproved();
     }
+
+    [Fact]
+    public async Task work_for_reserved_words()
+    {
+        var fakeDb = Substitute.For<IAmazonDynamoDB>();
+        QueryRequest? gotQueryRequest = null;
+        fakeDb.QueryAsync(Arg.Any<QueryRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new QueryResponse
+            {
+                HttpStatusCode = HttpStatusCode.OK,
+                ScannedCount = 1,
+                Items = new List<Dictionary<string, AttributeValue>>
+                {
+                    new Dictionary<string, AttributeValue>
+                    {
+                        ["PK"] = new AttributeValue
+                        {
+                            S = "item-1"
+                        },
+                        ["SK"] = new AttributeValue
+                        {
+                            S = "item-details"
+                        },
+                        ["Name"] = new AttributeValue
+                        {
+                            S = "test"
+                        }
+                    }
+                }
+            }).AndDoes(x => gotQueryRequest = x.Arg<QueryRequest>());
+
+        var sut = DynamoDbWrapperBuilder.Build(fakeDb);
+        var rsp = await sut.Query().PartitionKey().Equals("item-1")
+            .SortKey().Equals("item-details")
+            .Fetch<TestRecordWithReservedWord>();
+
+        gotQueryRequest.ShouldMatchApproved();
+    }
+}
+
+public record TestRecordWithReservedWord
+{
+    public string PK { get; init; }
+    public string SK { get; init; }
+    public string Name { get; init; }
 }
 

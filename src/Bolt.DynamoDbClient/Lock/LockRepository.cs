@@ -6,8 +6,8 @@ namespace Bolt.DynamoDbClient.Lock;
 
 internal record CreateLockRecordRequest
 {
-    public required string Key { get; init; }
-    public required string Token { get; init; }
+    public string Key { get; init; } = string.Empty;
+    public string Token { get; init; } = string.Empty;
     
     public long ExpiredAtInUnixTimeSeconds { get; init; }
     

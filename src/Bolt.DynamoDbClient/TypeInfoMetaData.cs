@@ -28,7 +28,7 @@ internal static class TypeInfoExtensions
         var isCollection = isSimpleType ? false : typeof(IEnumerable).IsAssignableFrom(type);
         var collectionItemType = isCollection ? (GetCollectionItemType(type) ?? typeof(string)) : null;
         var isDictionary = typeof(IDictionary).IsAssignableFrom(type);
-        var dictValyeType = isDictionary ? type.GetGenericArguments().LastOrDefault() : null;
+        var dictValueType = isDictionary ? type.GetGenericArguments().LastOrDefault() : null;
 
         return new TypeInfoMetaData
         {
@@ -38,7 +38,7 @@ internal static class TypeInfoExtensions
             CollectionItemType = collectionItemType,
             CollectionType = isCollection ? GetCollectionType(type) : null,
             IsDictionary = isDictionary,
-            DictionaryValueType = dictValyeType
+            DictionaryValueType = dictValueType
         };
     }
 
