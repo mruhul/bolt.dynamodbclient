@@ -29,7 +29,23 @@ namespace Bolt.DynamoDbClient.Tests
                 });
 
 
-            await sut.Increment<ComplexRecord>(new IncrementRequest { IncrementBy = 2, PartitionKey = "pk", SortKey = "sk", PropertyName = "IntValue" }, CancellationToken.None);
+            await sut.Increment<ComplexRecord>(new IncrementRequest
+            { 
+                PartitionKey = "pk", 
+                SortKey = "sk", 
+                PropertyValues = [
+                    new IncrementPropertyValue
+                    {
+                        PropertyName = "IntValue",
+                        IncrementBy = 2
+                    },
+                    new IncrementPropertyValue
+                    {
+                        PropertyName = "Int2Value",
+                        IncrementBy = -1
+                    },    
+                ]
+            }, CancellationToken.None);
 
             await fake.Received().UpdateItemAsync(Arg.Any<UpdateItemRequest>(), Arg.Any<CancellationToken>());
 

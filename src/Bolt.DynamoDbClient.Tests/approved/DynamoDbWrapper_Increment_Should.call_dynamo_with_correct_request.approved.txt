@@ -3,7 +3,8 @@
     "attributeUpdates": {},
     "expected": {},
     "expressionAttributeNames": {
-      "#IntValue": "IntValue"
+      "#prop0": "IntValue",
+      "#prop1": "Int2Value"
     },
     "expressionAttributeValues": {
       ":start": {
@@ -22,7 +23,7 @@
         "ss": [],
         "isSSSet": false
       },
-      ":incr": {
+      ":incr0": {
         "bool": false,
         "isBOOLSet": false,
         "bs": [],
@@ -32,6 +33,22 @@
         "m": {},
         "isMSet": false,
         "n": "2",
+        "ns": [],
+        "isNSSet": false,
+        "null": false,
+        "ss": [],
+        "isSSSet": false
+      },
+      ":incr1": {
+        "bool": false,
+        "isBOOLSet": false,
+        "bs": [],
+        "isBSSet": false,
+        "l": [],
+        "isLSet": false,
+        "m": {},
+        "isMSet": false,
+        "n": "-1",
         "ns": [],
         "isNSSet": false,
         "null": false,
@@ -74,6 +91,6 @@
       }
     },
     "tableName": "test-store",
-    "updateExpression": "SET #IntValue = if_not_exists(#IntValue, :start) \u002B :incr"
+    "updateExpression": "SET #prop0 = if_not_exists(#prop0, :start) \u002B :incr0, #prop1 = if_not_exists(#prop1, :start) \u002B :incr1"
   }
 }

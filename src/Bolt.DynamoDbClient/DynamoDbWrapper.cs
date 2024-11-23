@@ -236,22 +236,37 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
         var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
 
-        var propertyAlias = $"#{request.PropertyName}";
+        var expressionAttributeNames = new Dictionary<string, string>(request.PropertyValues.Length);
+        
+        var expressionAttributeValues = new Dictionary<string, AttributeValue>(request.PropertyValues.Length + 1);
 
+        expressionAttributeValues[":start"] = new AttributeValue { N = "0" };
+
+        var updateExpressions = new string[request.PropertyValues.Length];
+        
+        var index = 0;
+        foreach (var prop in request.PropertyValues)
+        {
+            var propAlias = $"#prop{index}";
+            var propIncrementAlias = $":incr{index}";
+            
+            expressionAttributeNames[propAlias] = prop.PropertyName;
+            expressionAttributeValues[propIncrementAlias] = new AttributeValue
+            {
+                N = prop.IncrementBy.ToString()
+            };
+            updateExpressions[index] = $"{ (index == 0 ? "SET " : string.Empty) }{propAlias} = if_not_exists({propAlias}, :start) + {propIncrementAlias}";
+            index++;
+        }
+        
+        
         await _db.UpdateItemAsync(new() 
         { 
             TableName = metaData.TableName,
             Key = BuildKeyAttributeValues(metaData, request.PartitionKey, request.SortKey),
-            ExpressionAttributeNames = new Dictionary<string, string>
-            {
-                {propertyAlias, request.PropertyName }
-            },
-            ExpressionAttributeValues = new Dictionary<string, AttributeValue>
-            {
-                {":start", new AttributeValue { N = "0" } },
-                {":incr", new AttributeValue{ N = request.IncrementBy.ToString() } }
-            },
-            UpdateExpression = $"SET {propertyAlias} = if_not_exists({propertyAlias}, :start) + :incr",
+            ExpressionAttributeNames = expressionAttributeNames,
+            ExpressionAttributeValues = expressionAttributeValues,
+            UpdateExpression = updateExpressions.Length == 1 ? updateExpressions[0] : string.Join(", ", updateExpressions),
         }, ct);
     }
 
@@ -693,8 +708,13 @@ public record IncrementRequest
 {
     public object PartitionKey { get; init; } = string.Empty;
     public object SortKey { get; init; } = string.Empty;
+    public IncrementPropertyValue[] PropertyValues { get; init; } = [];
+}
+
+public record IncrementPropertyValue
+{
     public string PropertyName { get; init; } = string.Empty;
-    public int IncrementBy { get; init; } = 1;
+    public int IncrementBy { get; init; }
 }
 
 public abstract record WriteItemRequest
