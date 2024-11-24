@@ -33,10 +33,10 @@ namespace Bolt.DynamoDbClient.Tests
             { 
                 PartitionKey = "pk", 
                 SortKey = "sk", 
-                PropertyValues = {
-                    ["IntValue"] = 2,
-                    ["Int2Value"] = -1
-                }
+                PropertyValues = [
+                    new("IntValue", 2),
+                    new("Int2Value", -1)
+                ]
             }, CancellationToken.None);
 
             await fake.Received().UpdateItemAsync(Arg.Any<UpdateItemRequest>(), Arg.Any<CancellationToken>());

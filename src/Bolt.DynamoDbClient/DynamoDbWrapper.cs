@@ -236,13 +236,13 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
         var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
 
-        var expressionAttributeNames = new Dictionary<string, string>(request.PropertyValues.Count);
+        var expressionAttributeNames = new Dictionary<string, string>(request.PropertyValues.Length);
         
-        var expressionAttributeValues = new Dictionary<string, AttributeValue>(request.PropertyValues.Count + 1);
+        var expressionAttributeValues = new Dictionary<string, AttributeValue>(request.PropertyValues.Length + 1);
 
         expressionAttributeValues[":start"] = new AttributeValue { N = "0" };
 
-        var updateExpressions = new string[request.PropertyValues.Count];
+        var updateExpressions = new string[request.PropertyValues.Length];
         
         var index = 0;
         foreach (var prop in request.PropertyValues)
@@ -250,10 +250,10 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             var propAlias = $"#prop{index}";
             var propIncrementAlias = $":incr{index}";
             
-            expressionAttributeNames[propAlias] = prop.Key;
+            expressionAttributeNames[propAlias] = prop.PropertyName;
             expressionAttributeValues[propIncrementAlias] = new AttributeValue
             {
-                N = prop.Value.ToString()
+                N = prop.IncrementBy.ToString()
             };
             updateExpressions[index] = $"{ (index == 0 ? "SET " : string.Empty) }{propAlias} = if_not_exists({propAlias}, :start) + {propIncrementAlias}";
             index++;
@@ -708,7 +708,23 @@ public record IncrementRequest
 {
     public object PartitionKey { get; init; } = string.Empty;
     public object SortKey { get; init; } = string.Empty;
-    public Dictionary<string,int> PropertyValues { get; init; } = [];
+    public PropertyIncrementValue[] PropertyValues { get; init; } = [];
+}
+
+public record PropertyIncrementValue
+{
+    public PropertyIncrementValue()
+    {
+    }
+
+    public PropertyIncrementValue(string propertyName, int incrementBy)
+    {
+        PropertyName = propertyName;
+        IncrementBy = incrementBy;
+    }
+    
+    public string PropertyName { get; init; } = string.Empty;
+    public int IncrementBy { get; init; }
 }
 
 public abstract record WriteItemRequest
