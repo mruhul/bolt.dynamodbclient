@@ -1,0 +1,277 @@
+﻿{
+  "transactItems": [
+    {
+      "put": {
+        "conditionExpression": "attribute_not_exists(#pk) and attribute_not_exists(#sk)",
+        "expressionAttributeNames": {
+          "#pk": "PK",
+          "#sk": "SK"
+        },
+        "expressionAttributeValues": {},
+        "item": {
+          "Name": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "testing",
+            "ss": [],
+            "isSSSet": false
+          },
+          "PK": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "sample-record#1",
+            "ss": [],
+            "isSSSet": false
+          },
+          "SK": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "sample-record#details",
+            "ss": [],
+            "isSSSet": false
+          }
+        },
+        "tableName": "sample-store"
+      }
+    },
+    {
+      "put": {
+        "expressionAttributeNames": {},
+        "expressionAttributeValues": {},
+        "item": {
+          "Name": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "testing 2",
+            "ss": [],
+            "isSSSet": false
+          },
+          "PK": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "sample-record#2",
+            "ss": [],
+            "isSSSet": false
+          },
+          "SK": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "sample-record#details",
+            "ss": [],
+            "isSSSet": false
+          }
+        },
+        "tableName": "sample-store"
+      }
+    },
+    {
+      "update": {
+        "expressionAttributeNames": {
+          "#Name": "Name"
+        },
+        "expressionAttributeValues": {
+          ":Name": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "testing other record update 1",
+            "ss": [],
+            "isSSSet": false
+          }
+        },
+        "key": {
+          "PK": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "sample-other-record#1",
+            "ss": [],
+            "isSSSet": false
+          },
+          "SK": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "sample-other-record#details",
+            "ss": [],
+            "isSSSet": false
+          }
+        },
+        "tableName": "sample-store",
+        "updateExpression": "SET #Name = :Name"
+      }
+    },
+    {
+      "update": {
+        "expressionAttributeNames": {
+          "#prop0": "TotalCommits",
+          "#prop1": "TotalLikes"
+        },
+        "expressionAttributeValues": {
+          ":start": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "n": "0",
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "ss": [],
+            "isSSSet": false
+          },
+          ":incr0": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "n": "1",
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "ss": [],
+            "isSSSet": false
+          },
+          ":incr1": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "n": "-1",
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "ss": [],
+            "isSSSet": false
+          }
+        },
+        "key": {
+          "PK": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "inc-pk-1",
+            "ss": [],
+            "isSSSet": false
+          },
+          "SK": {
+            "bool": false,
+            "isBOOLSet": false,
+            "bs": [],
+            "isBSSet": false,
+            "l": [],
+            "isLSet": false,
+            "m": {},
+            "isMSet": false,
+            "ns": [],
+            "isNSSet": false,
+            "null": false,
+            "s": "inc-sk-1",
+            "ss": [],
+            "isSSSet": false
+          }
+        },
+        "tableName": "sample-store",
+        "updateExpression": "SET #prop0 = if_not_exists(#prop0, :start) \u002B :incr0, #prop1 = if_not_exists(#prop1, :start) \u002B :incr1"
+      }
+    }
+  ]
+}

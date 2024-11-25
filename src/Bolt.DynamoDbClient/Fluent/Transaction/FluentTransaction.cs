@@ -50,16 +50,22 @@ public class FluentTransaction
 
     public FluentTransaction Increment<T>(string propertyName, object pk, object sk, int incrementBy = 1)
     {
+        return Increment<T>(pk, sk, [
+            new(propertyName, incrementBy)
+        ]);
+    }
+
+    public FluentTransaction Increment<T>(object pk, object sk, PropertyIncrementValue[] values)
+    {
         if (pk is null) throw new ArgumentNullException(nameof(pk));
         if (sk is null) throw new ArgumentNullException(nameof(sk));
 
-        _requests.Add(new TransactIncrementRequest 
-        { 
+        _requests.Add(new TransactIncrementRequest
+        {
             ItemType = typeof(T),
             PartitionKey = pk,
             SortKey = sk,
-            IncrementBy = incrementBy,
-            PropertyName = propertyName,
+            PropertyValues = values
         });
 
         return this;

@@ -406,24 +406,38 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
         if (partitionKeyAtt == null || sortKeyAtt == null) return null;
 
-        var propertyAlias = $"#{request.PropertyName}";
+        var expressionAttributeNames = new Dictionary<string, string>(request.PropertyValues.Length);
+        
+        var expressionAttributeValues = new Dictionary<string, AttributeValue>(request.PropertyValues.Length + 1);
+
+        expressionAttributeValues[":start"] = new AttributeValue { N = "0" };
+
+        var updateExpressions = new string[request.PropertyValues.Length];
+
+        var index = 0;
+        foreach (var prop in request.PropertyValues)
+        {
+            var propAlias = $"#prop{index}";
+            var propIncrementAlias = $":incr{index}";
+            
+            expressionAttributeNames[propAlias] = prop.PropertyName;
+            expressionAttributeValues[propIncrementAlias] = new AttributeValue
+            {
+                N = prop.IncrementBy.ToString()
+            };
+            updateExpressions[index] = $"{ (index == 0 ? "SET " : string.Empty) }{propAlias} = if_not_exists({propAlias}, :start) + {propIncrementAlias}";
+            index++;
+        }
 
         return new TransactWriteItem()
         {
-            Update = new Update()
+            Update = new Update
             {
                 TableName = metaData.TableName,
                 Key = BuildKeyAttributeValues(metaData, request.PartitionKey, request.SortKey),
-                UpdateExpression = $"SET {propertyAlias} = if_not_exists({propertyAlias}, :start) + :incr",
-                ExpressionAttributeNames = new Dictionary<string, string>
-                {
-                    {propertyAlias, request.PropertyName}
-                },
-                ExpressionAttributeValues = new Dictionary<string, AttributeValue>
-                {
-                    {":start", new AttributeValue { N = "0" } },
-                    {":incr", new AttributeValue{ N = request.IncrementBy.ToString() } }
-                }
+                UpdateExpression = updateExpressions.Length == 1 ? updateExpressions[0] : string.Join(", ", updateExpressions),
+                ExpressionAttributeNames = expressionAttributeNames,
+                ExpressionAttributeValues = expressionAttributeValues
             }
         };
     }
@@ -742,8 +756,8 @@ public record TransactIncrementRequest : WriteItemRequest
     public Type ItemType { get; init; } = null!;
     public object PartitionKey { get; init; } = string.Empty;
     public object SortKey { get; init; } = string.Empty;
-    public string PropertyName { get; init; } = string.Empty;
-    public int IncrementBy { get; init; } = 1;
+    
+    public PropertyIncrementValue[] PropertyValues { get; init; } = [];
 }
 
 public abstract record TransactDeleteItemRequest(Type ItemType, object PartitionKey, object SortKey) : WriteItemRequest;
