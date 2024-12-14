@@ -69,7 +69,7 @@ namespace Bolt.DynamoDbClient.Tests
         }
         
         [Fact]
-        public void call_dynamo_with_correct_request_when_increment_attriubute_exists()
+        public void call_dynamo_with_correct_request_when_increment_attribute_exists()
         {
             UpdateItemRequest gotRequest = null;
 
