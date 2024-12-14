@@ -37,6 +37,7 @@ internal record DynamoDbItemMetaProperty
     public DynamoDbOperationIgnoreInstructionType IgnoreInstruction { get; init; }
     public PropertyInfo PropertyInfo { get; init; }
     public TypeInfoMetaData TypeMetaData { get; init; }
+    public bool UseValueToIncrement { get; init; }
 }
 
 internal static class DynamoDbItemMetaDataReader
@@ -68,7 +69,8 @@ internal static class DynamoDbItemMetaDataReader
             var skAttr = prop.GetCustomAttribute<DynamoDbSortKeyAttribute>();
             var ignoreAttr = prop.GetCustomAttribute<DynamoDbOperationIgnoreAttribute>();
             var columnAttr = prop.GetCustomAttribute<DynamoDbColumnAttribute>();
-
+            var incrementValueAttr = prop.GetCustomAttribute<DynamoDbIncrementValueAttribute>();
+            
             DynamoDbColumnType? columnType = null;
 
             if (pkAttr != null)
@@ -114,7 +116,8 @@ internal static class DynamoDbItemMetaDataReader
                 columnAttr?.Name, 
                 ignoreAttr?.Ignore)
             {
-                TypeMetaData = prop.PropertyType.GetTypeInfo()
+                TypeMetaData = prop.PropertyType.GetTypeInfo(),
+                UseValueToIncrement = incrementValueAttr != null,
             });
         }
 
@@ -217,6 +220,10 @@ public class DynamoDbSortKeyAttribute : Attribute
     }
 
     public string? Name { get; private set; }
+}
+
+public class DynamoDbIncrementValueAttribute : Attribute
+{
 }
 
 public class DynamoDbOperationIgnoreAttribute : Attribute

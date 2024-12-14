@@ -17,19 +17,19 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         _distributedLock = distributedLock;
     }
 
-    public async Task<DbSearchResponse<T>> Query<T>(DbSearchRequest request, CancellationToken ct) where T: new()
+    public async Task<DbSearchResponse<T>> Query<T>(DbSearchRequest request, CancellationToken ct) where T : new()
     {
         var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
 
         var attributeNames = request.ExpressionAttributeNames;
-        
+
         string? projectedExpression = request.ProjectionExpression;
-        if(string.IsNullOrWhiteSpace(projectedExpression))
+        if (string.IsNullOrWhiteSpace(projectedExpression))
         {
             StringBuilder projectionExpressionSb = new StringBuilder();
 
             var firstItem = true;
-            foreach(var prop in metaData.Properties)
+            foreach (var prop in metaData.Properties)
             {
                 if (prop.ProjectionColumnName != null)
                 {
@@ -37,7 +37,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
                     attributeNames[prop.ProjectionColumnName] = prop.ColumnName;
                 }
-                
+
                 if (firstItem)
                 {
                     firstItem = false;
@@ -47,7 +47,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
                 else
                 {
                     projectionExpressionSb.Append(", ").Append(prop.ProjectionColumnName ?? prop.ColumnName);
-                }                
+                }
             }
 
             projectedExpression = projectionExpressionSb.ToString();
@@ -76,11 +76,11 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             ScannedCount: rsp.ScannedCount
         );
     }
-   
+
     public async Task<T?> GetSingleItem<T>(GetSingleItemRequest getSingleItem, CancellationToken ct) where T : new()
     {
         var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
-        var rsp = await _db.GetItemAsync(new GetItemRequest() 
+        var rsp = await _db.GetItemAsync(new GetItemRequest()
         {
             TableName = metaData.TableName,
             Key = BuildKeyAttributeValues(metaData, getSingleItem.PartitionKey, getSingleItem.SortKey)
@@ -89,23 +89,24 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         return rsp.Item.MapTo<T>();
     }
 
-    public async Task<DbBatchReadResponse> GetItemsInBatch(IEnumerable<DbBatchReadRequest> requests, CancellationToken ct)
+    public async Task<DbBatchReadResponse> GetItemsInBatch(IEnumerable<DbBatchReadRequest> requests,
+        CancellationToken ct)
     {
         var requestItems = new Dictionary<string, KeysAndAttributes>();
-        var tableKeyNames = new Dictionary<string, (string PartitionKeyColumnName, 
-            Type? ParitionKeyPropertyType, 
-            string SortKeyColumnName, 
+        var tableKeyNames = new Dictionary<string, (string PartitionKeyColumnName,
+            Type? ParitionKeyPropertyType,
+            string SortKeyColumnName,
             Type? SortKeyPropertyType)>();
         var itemTypes = new Dictionary<string, Type>();
         var columnsToRead = new Dictionary<string, Dictionary<string, string>>();
 
-        foreach(var req in requests)
+        foreach (var req in requests)
         {
             var metaData = DynamoDbItemMetaDataReader.Get(req.ItemType);
 
-            tableKeyNames[metaData.TableName] = (metaData.PartitionKeyColumnName, 
-                metaData.PartitionKeyProperty?.PropertyType, 
-                metaData.SortKeyColumnName, 
+            tableKeyNames[metaData.TableName] = (metaData.PartitionKeyColumnName,
+                metaData.PartitionKeyProperty?.PropertyType,
+                metaData.SortKeyColumnName,
                 metaData.SortKeyProperty?.PropertyType);
 
             if (requestItems.TryGetValue(metaData.TableName, out var keyAndAttributes) == false)
@@ -120,17 +121,18 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
                 columnsToRead[metaData.TableName][prop.ColumnName] = prop.ColumnName;
             }
 
-            foreach(var keys in req.Keys)
+            foreach (var keys in req.Keys)
             {
                 if (metaData.PartitionKeyProperty != null && metaData.SortKeyProperty != null)
                 {
-                    var partionKeyAttValue = BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, keys.PartitionKey);
+                    var partionKeyAttValue =
+                        BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, keys.PartitionKey);
                     var sortKeyAttValue = BuildAttributeValue(metaData.SortKeyProperty.PropertyType, keys.SortKey);
 
                     if (partionKeyAttValue != null && sortKeyAttValue != null)
                     {
                         itemTypes[$"{metaData.TableName}:{keys.PartitionKey}:{keys.SortKey}"] = req.ItemType;
-                        
+
                         keyAndAttributes.Keys.Add(new Dictionary<string, AttributeValue>
                         {
                             [metaData.PartitionKeyColumnName] = partionKeyAttValue,
@@ -141,7 +143,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             }
         }
 
-        foreach(var item in requestItems)
+        foreach (var item in requestItems)
         {
             item.Value.ProjectionExpression = string.Join(", ", columnsToRead[item.Key].Keys.ToArray());
         }
@@ -179,7 +181,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
     public async Task Upsert(object item, bool skipNullValues, CancellationToken ct)
     {
-        if(item == null) throw new ArgumentNullException(nameof(item));
+        if (item == null) throw new ArgumentNullException(nameof(item));
 
         var metaData = DynamoDbItemMetaDataReader.Get(item.GetType());
 
@@ -237,36 +239,39 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
 
         var expressionAttributeNames = new Dictionary<string, string>(request.PropertyValues.Length);
-        
+
         var expressionAttributeValues = new Dictionary<string, AttributeValue>(request.PropertyValues.Length + 1);
 
         expressionAttributeValues[":start"] = new AttributeValue { N = "0" };
 
         var updateExpressions = new string[request.PropertyValues.Length];
-        
+
         var index = 0;
         foreach (var prop in request.PropertyValues)
         {
             var propAlias = $"#prop{index}";
             var propIncrementAlias = $":incr{index}";
-            
+
             expressionAttributeNames[propAlias] = prop.PropertyName;
             expressionAttributeValues[propIncrementAlias] = new AttributeValue
             {
                 N = prop.IncrementBy.ToString()
             };
-            updateExpressions[index] = $"{ (index == 0 ? "SET " : string.Empty) }{propAlias} = if_not_exists({propAlias}, :start) + {propIncrementAlias}";
+            updateExpressions[index] =
+                $"{(index == 0 ? "SET " : string.Empty)}{propAlias} = if_not_exists({propAlias}, :start) + {propIncrementAlias}";
             index++;
         }
-        
-        
-        await _db.UpdateItemAsync(new() 
-        { 
+
+
+        await _db.UpdateItemAsync(new()
+        {
             TableName = metaData.TableName,
             Key = BuildKeyAttributeValues(metaData, request.PartitionKey, request.SortKey),
             ExpressionAttributeNames = expressionAttributeNames,
             ExpressionAttributeValues = expressionAttributeValues,
-            UpdateExpression = updateExpressions.Length == 1 ? updateExpressions[0] : string.Join(", ", updateExpressions),
+            UpdateExpression = updateExpressions.Length == 1
+                ? updateExpressions[0]
+                : string.Join(", ", updateExpressions),
         }, ct);
     }
 
@@ -297,7 +302,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
     {
         var transactItems = new List<TransactWriteItem>();
 
-        foreach(var request in requests)
+        foreach (var request in requests)
         {
             var req = BuildTransactWriteItem(request);
 
@@ -309,7 +314,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             TransactItems = transactItems
         }, ct);
     }
-    
+
     public async Task<IEnumerable<T>> Query<T>(QueryRequest request, CancellationToken ct) where T : new()
     {
         var rsp = await _db.QueryAsync(request, ct);
@@ -334,7 +339,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             return BuildTransactionWriteItem(updateRequest);
         }
 
-        if(request is TransactIncrementRequest incrementRequest)
+        if (request is TransactIncrementRequest incrementRequest)
         {
             return BuildTransactionWriteItem(incrementRequest);
         }
@@ -343,12 +348,12 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         {
             var metaData = DynamoDbItemMetaDataReader.Get(deleteRequest.ItemType);
 
-            var partitionKeyAtt = metaData.PartitionKeyProperty != null 
-                                ? BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, deleteRequest.PartitionKey)
-                                : null;
+            var partitionKeyAtt = metaData.PartitionKeyProperty != null
+                ? BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, deleteRequest.PartitionKey)
+                : null;
             var sortKeyAtt = metaData.SortKeyProperty != null
-                                ? BuildAttributeValue(metaData.SortKeyProperty.PropertyType, deleteRequest.SortKey)
-                                : null;
+                ? BuildAttributeValue(metaData.SortKeyProperty.PropertyType, deleteRequest.SortKey)
+                : null;
 
             if (partitionKeyAtt != null && sortKeyAtt != null)
             {
@@ -398,16 +403,16 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         var metaData = DynamoDbItemMetaDataReader.Get(request.ItemType);
 
         var partitionKeyAtt = metaData.PartitionKeyProperty != null
-                                ? BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, request.PartitionKey)
-                                : null;
+            ? BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, request.PartitionKey)
+            : null;
         var sortKeyAtt = metaData.SortKeyProperty != null
-                            ? BuildAttributeValue(metaData.SortKeyProperty.PropertyType, request.SortKey)
-                            : null;
+            ? BuildAttributeValue(metaData.SortKeyProperty.PropertyType, request.SortKey)
+            : null;
 
         if (partitionKeyAtt == null || sortKeyAtt == null) return null;
 
         var expressionAttributeNames = new Dictionary<string, string>(request.PropertyValues.Length);
-        
+
         var expressionAttributeValues = new Dictionary<string, AttributeValue>(request.PropertyValues.Length + 1);
 
         expressionAttributeValues[":start"] = new AttributeValue { N = "0" };
@@ -419,13 +424,14 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         {
             var propAlias = $"#prop{index}";
             var propIncrementAlias = $":incr{index}";
-            
+
             expressionAttributeNames[propAlias] = prop.PropertyName;
             expressionAttributeValues[propIncrementAlias] = new AttributeValue
             {
                 N = prop.IncrementBy.ToString()
             };
-            updateExpressions[index] = $"{ (index == 0 ? "SET " : string.Empty) }{propAlias} = if_not_exists({propAlias}, :start) + {propIncrementAlias}";
+            updateExpressions[index] =
+                $"{(index == 0 ? "SET " : string.Empty)}{propAlias} = if_not_exists({propAlias}, :start) + {propIncrementAlias}";
             index++;
         }
 
@@ -435,7 +441,9 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
             {
                 TableName = metaData.TableName,
                 Key = BuildKeyAttributeValues(metaData, request.PartitionKey, request.SortKey),
-                UpdateExpression = updateExpressions.Length == 1 ? updateExpressions[0] : string.Join(", ", updateExpressions),
+                UpdateExpression = updateExpressions.Length == 1
+                    ? updateExpressions[0]
+                    : string.Join(", ", updateExpressions),
                 ExpressionAttributeNames = expressionAttributeNames,
                 ExpressionAttributeValues = expressionAttributeValues
             }
@@ -474,7 +482,6 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
     }
 
 
-
     private TransactWriteItem? BuildTransactionWriteItem(TransactUpdateItemRequest updateRequest)
     {
         var metaData = DynamoDbItemMetaDataReader.Get(updateRequest.Item.GetType());
@@ -493,6 +500,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
                 }
             };
         }
+
         return null;
     }
 
@@ -532,8 +540,9 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         var firstRemoveItem = true;
         bool hasRemoveItem = false;
         var hasSetItem = false;
+        var isIncrementApplicable = false;
 
-        foreach(var prop in metaData.Properties)
+        foreach (var prop in metaData.Properties)
         {
             if (prop.ColumnType != DynamoDbColumnType.Default)
             {
@@ -542,10 +551,11 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
                 {
                     keys[prop.ColumnName] = value;
                 }
+
                 continue;
             }
 
-            if(prop.IgnoreInstruction == DynamoDbOperationIgnoreInstructionType.Always
+            if (prop.IgnoreInstruction == DynamoDbOperationIgnoreInstructionType.Always
                 || prop.IgnoreInstruction == DynamoDbOperationIgnoreInstructionType.Update) continue;
 
             var attValue = BuildAttributeValue(prop, prop.PropertyInfo.GetValue(item));
@@ -555,7 +565,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
                 if (skipNullValues) continue;
 
                 updateAttributeNames.Add($"#{prop.ColumnName}", prop.ColumnName);
-                
+
                 if (firstRemoveItem)
                 {
                     firstRemoveItem = false;
@@ -572,16 +582,37 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
                 updateAttributeNames.Add($"#{prop.ColumnName}", prop.ColumnName);
                 updateAttributeValues.Add($":{prop.ColumnName}", attValue);
 
+                if (prop.UseValueToIncrement && isIncrementApplicable == false)
+                {
+                    isIncrementApplicable = true;
+                    updateAttributeValues[":start"] = new AttributeValue { N = "0" };
+                }
+
 
                 if (firstSetItem)
                 {
                     firstSetItem = false;
                     hasSetItem = true;
-                    setExpression.Append($"SET #{prop.ColumnName} = :{prop.ColumnName}");
+
+                    if (prop.UseValueToIncrement)
+                    {
+                        setExpression.Append($"SET #{prop.ColumnName} = if_not_exists(#{prop.ColumnName}, :start) + :{prop.ColumnName}");
+                    }
+                    else
+                    {
+                        setExpression.Append($"SET #{prop.ColumnName} = :{prop.ColumnName}");
+                    }
                 }
                 else
                 {
-                    setExpression.Append($", #{prop.ColumnName} = :{prop.ColumnName}");
+                    if (prop.UseValueToIncrement)
+                    {
+                        setExpression.Append($", #{prop.ColumnName} = if_not_exists(#{prop.ColumnName}, :start) + :{prop.ColumnName}");
+                    }
+                    else
+                    {
+                        setExpression.Append($", #{prop.ColumnName} = :{prop.ColumnName}");
+                    }
                 }
             }
         }
@@ -609,19 +640,20 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         {
             TableName = metaData.TableName,
             Key = keys,
-            UpdateExpression= updateExpression,
+            UpdateExpression = updateExpression,
             ExpressionAttributeNames = updateAttributeNames,
             ExpressionAttributeValues = updateAttributeValues,
         };
     }
 
-    private Dictionary<string,  AttributeValue> BuildUpsertAttributes(DynamoDbItemMetaData metaData, object item, bool skipNullValues)
+    private Dictionary<string, AttributeValue> BuildUpsertAttributes(DynamoDbItemMetaData metaData, object item,
+        bool skipNullValues)
     {
         var result = new Dictionary<string, AttributeValue>();
 
-        foreach(var prop in metaData.Properties)
+        foreach (var prop in metaData.Properties)
         {
-            if(prop.IgnoreInstruction == DynamoDbOperationIgnoreInstructionType.Always
+            if (prop.IgnoreInstruction == DynamoDbOperationIgnoreInstructionType.Always
                 || prop.IgnoreInstruction == DynamoDbOperationIgnoreInstructionType.Upsert)
             {
                 continue;
@@ -633,7 +665,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
             if (attValue == null)
             {
-                if(skipNullValues) continue;
+                if (skipNullValues) continue;
 
                 attValue = new AttributeValue
                 {
@@ -647,7 +679,8 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         return result;
     }
 
-    private Dictionary<string, AttributeValue> BuildKeyAttributeValues(DynamoDbItemMetaData metaData, object partitionKeyValue, object sortKeyValue)
+    private Dictionary<string, AttributeValue> BuildKeyAttributeValues(DynamoDbItemMetaData metaData,
+        object partitionKeyValue, object sortKeyValue)
     {
         if (metaData.PartitionKeyProperty == null || metaData.SortKeyProperty == null)
         {
@@ -657,7 +690,8 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
         var partitionAtt = BuildAttributeValue(metaData.PartitionKeyProperty.PropertyType, partitionKeyValue);
         var sortAtt = BuildAttributeValue(metaData.SortKeyProperty.PropertyType, sortKeyValue);
 
-        if (partitionAtt == null || sortAtt == null) throw new ArgumentNullException("Partition key and sort key cannot be null");
+        if (partitionAtt == null || sortAtt == null)
+            throw new ArgumentNullException("Partition key and sort key cannot be null");
 
         return new Dictionary<string, AttributeValue>
         {
@@ -668,7 +702,8 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
     private AttributeValue? BuildAttributeValue(Type propertyType, object? value)
     {
-        return BuildAttributeValue(propertyType, new() { Type = propertyType, IsCollection = false, IsSimpleType = true }, value);
+        return BuildAttributeValue(propertyType,
+            new() { Type = propertyType, IsCollection = false, IsSimpleType = true }, value);
     }
 
     private AttributeValue? BuildAttributeValue(DynamoDbItemMetaProperty prop, object? value)
@@ -693,7 +728,7 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
             foreach (var item in collection)
             {
-                if(item == null) continue;
+                if (item == null) continue;
 
                 items.Add(item?.ToString() ?? string.Empty);
             }
@@ -708,10 +743,11 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
     }
 
     private const string UtcFormat = "o";
+
     private static string FormatAsUtc(DateTime source)
         => source.Kind == DateTimeKind.Utc
-                ? source.ToString(UtcFormat)
-                : source.ToUniversalTime().ToString(UtcFormat);
+            ? source.ToString(UtcFormat)
+            : source.ToUniversalTime().ToString(UtcFormat);
 }
 
 public record DeleteSingleItemRequest(object partitionKey, object sortKey);
@@ -736,7 +772,7 @@ public record PropertyIncrementValue
         PropertyName = propertyName;
         IncrementBy = incrementBy;
     }
-    
+
     public string PropertyName { get; init; } = string.Empty;
     public int IncrementBy { get; init; }
 }
@@ -756,13 +792,14 @@ public record TransactIncrementRequest : WriteItemRequest
     public Type ItemType { get; init; } = null!;
     public object PartitionKey { get; init; } = string.Empty;
     public object SortKey { get; init; } = string.Empty;
-    
+
     public PropertyIncrementValue[] PropertyValues { get; init; } = [];
 }
 
 public abstract record TransactDeleteItemRequest(Type ItemType, object PartitionKey, object SortKey) : WriteItemRequest;
 
-public record TransactDeleteItemRequest<T>(object PartitionKey, object SortKey) : TransactDeleteItemRequest(typeof(T), PartitionKey, SortKey);
+public record TransactDeleteItemRequest<T>(object PartitionKey, object SortKey)
+    : TransactDeleteItemRequest(typeof(T), PartitionKey, SortKey);
 
 public enum WriteOperationType
 {
@@ -795,12 +832,12 @@ public record DbBatchReadResponse
 {
     private readonly Dictionary<Type, Dictionary<string, Dictionary<string, AttributeValue>>> _responses;
 
-    public DbBatchReadResponse(Dictionary<Type, Dictionary<string, Dictionary<string,AttributeValue>>> responses)
+    public DbBatchReadResponse(Dictionary<Type, Dictionary<string, Dictionary<string, AttributeValue>>> responses)
     {
         _responses = responses;
     }
 
-    public T? GetSingle<T>(string partitionKey, string sortKey) where T: new()
+    public T? GetSingle<T>(string partitionKey, string sortKey) where T : new()
     {
         return GetSingle<T, string, string>(partitionKey, sortKey);
     }
@@ -809,13 +846,14 @@ public record DbBatchReadResponse
     {
         var type = typeof(T);
 
-        if(_responses.TryGetValue(type, out var rows))
+        if (_responses.TryGetValue(type, out var rows))
         {
-            if(rows.TryGetValue($"{partitionKey}|{sortKey}", out var row))
+            if (rows.TryGetValue($"{partitionKey}|{sortKey}", out var row))
             {
                 return row.MapTo<T>();
             }
         }
+
         return default;
     }
 
@@ -825,8 +863,8 @@ public record DbBatchReadResponse
 
         if (_responses.TryGetValue(type, out var rows))
         {
-            foreach(var row in rows)
-            { 
+            foreach (var row in rows)
+            {
                 var item = row.Value.MapTo<T>();
 
                 if (item != null) yield return item;

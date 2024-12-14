@@ -67,6 +67,35 @@ namespace Bolt.DynamoDbClient.Tests
                 GotRequest = gotRequest
             }.ShouldMatchApproved(input.Key, input.Scenario);
         }
+        
+        [Fact]
+        public void call_dynamo_with_correct_request_when_increment_attriubute_exists()
+        {
+            UpdateItemRequest gotRequest = null;
+
+            fake.UpdateItemAsync(Arg.Any<UpdateItemRequest>(), Arg.Any<CancellationToken>())
+                .Returns(new UpdateItemResponse())
+                .AndDoes(c =>
+                {
+                    gotRequest = c.Arg<UpdateItemRequest>();
+                });
+
+
+            sut.Update(new SummaryRecord
+            {
+                PK = "my-pk",
+                SK = "my-sk",
+                Id = new Guid("3FB8B9DF-BAB9-4031-B2AE-99B8F04A4940"),
+                Name = "first last",
+                LikeCount = 1,
+                PhotoCount = 2,
+                VideoCount = -1,
+            }, false);
+
+            fake.Received().UpdateItemAsync(Arg.Any<UpdateItemRequest>(), Arg.Any<CancellationToken>());
+
+            gotRequest.ShouldMatchApproved();
+        }
 
         public static IEnumerable<object[]> TestData = new TestData<ComplexRecord>[]
         {
@@ -91,5 +120,19 @@ namespace Bolt.DynamoDbClient.Tests
                 }
             },
         }.ToTestData();
+    }
+
+    public record SummaryRecord
+    {
+        public string PK { get; init; }
+        public string SK { get; init; }
+        public Guid Id { get; init; }
+        public string Name { get; init; }
+        [DynamoDbIncrementValue]
+        public int LikeCount { get; init; }
+        [DynamoDbIncrementValue]
+        public int PhotoCount { get; init; }
+        [DynamoDbIncrementValue]
+        public int VideoCount { get; init; }
     }
 }
