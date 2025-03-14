@@ -44,6 +44,12 @@ internal static class AttributeValueMapper
         if (IsString(type)) return attr.S;
         if (IsGuid(type)) return new Guid(attr.S);
         if (type.IsEnum) return Enum.Parse(type, attr.S);
+        
+        if (Nullable.GetUnderlyingType(type) is { IsEnum: true } underlyingEnumType)
+        {
+            return string.IsNullOrWhiteSpace(attr.S) ? null : Enum.Parse(underlyingEnumType, attr.S);
+        }
+        
         if (IsDateTime(type)) return GetDateTime(attr);
         if (IsDateTimeOffset(type)) return GetDateTimeOffset(attr);
         if (IsInt(type)) return int.Parse(attr.N);
