@@ -21,7 +21,7 @@ internal class FluentLock : IHaveFluentLockKey, IHaveFluentLockTimeout, IHaveFlu
 
     public async Task<(bool, T?)> Execute<T>(Func<CancellationToken, Task<T>> func, CancellationToken ct)
     {
-        var token = string.IsNullOrWhiteSpace(_token) ? Guid.NewGuid().ToString() : string.Empty;
+        var token = string.IsNullOrWhiteSpace(_token) ? Guid.NewGuid().ToString() : _token;
         var duration = _duration ?? TimeSpan.FromMinutes(1);
         var retry = _retry ?? 0;
         
