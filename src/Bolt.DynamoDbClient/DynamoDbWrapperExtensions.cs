@@ -19,6 +19,23 @@ namespace Bolt.DynamoDbClient
         public static Task<T?> GetSingleItem<T>(this IDynamoDbWrapper db, object partitionKey, object sortKey,
             CancellationToken ct) where T : new()
             => db.GetSingleItem<T>(new GetSingleItemRequest(partitionKey, sortKey), ct);
+        
+        /// <summary>
+        /// Retrieve an item by partition key and sort key. return null when doesn't exist
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="partitionKey"></param>
+        /// <param name="sortKey"></param>
+        /// <param name="consistentRead"></param>
+        /// <param name="ct"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static Task<T?> GetSingleItem<T>(this IDynamoDbWrapper db, object partitionKey, object sortKey,
+            bool consistentRead, CancellationToken ct) where T : new()
+            => db.GetSingleItem<T>(new GetSingleItemRequest(partitionKey, sortKey)
+            {
+                ConsistentRead = consistentRead
+            }, ct);
 
         /// <summary>
         /// Retrieve an item by partition key of type string and sort key of type string. return null when doesn't exist

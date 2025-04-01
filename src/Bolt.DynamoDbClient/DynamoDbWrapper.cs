@@ -80,10 +80,11 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
     public async Task<T?> GetSingleItem<T>(GetSingleItemRequest getSingleItem, CancellationToken ct) where T : new()
     {
         var metaData = DynamoDbItemMetaDataReader.Get(typeof(T));
-        var rsp = await _db.GetItemAsync(new GetItemRequest()
+        var rsp = await _db.GetItemAsync(new GetItemRequest
         {
             TableName = metaData.TableName,
-            Key = BuildKeyAttributeValues(metaData, getSingleItem.PartitionKey, getSingleItem.SortKey)
+            Key = BuildKeyAttributeValues(metaData, getSingleItem.PartitionKey, getSingleItem.SortKey),
+            ConsistentRead = getSingleItem.ConsistentRead
         }, ct);
 
         return rsp.Item.MapTo<T>();
@@ -752,7 +753,10 @@ internal class DynamoDbWrapper : IDynamoDbWrapper
 
 public record DeleteSingleItemRequest(object partitionKey, object sortKey);
 
-public record GetSingleItemRequest(object PartitionKey, object SortKey);
+public record GetSingleItemRequest(object PartitionKey, object SortKey)
+{
+    public bool ConsistentRead { get; init; } = false;
+};
 
 public record IncrementRequest
 {
