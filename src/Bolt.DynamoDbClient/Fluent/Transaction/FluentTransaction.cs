@@ -3,7 +3,7 @@
 public class FluentTransaction
 {
     private readonly IDynamoDbWrapper _db;
-    private List<WriteItemRequest> _requests;
+    private readonly List<WriteItemRequest> _requests;
 
     internal FluentTransaction(IDynamoDbWrapper db)
     {
@@ -75,4 +75,13 @@ public class FluentTransaction
     {
         return _db.WriteItemsInTransaction(_requests, ct);
     }
+    
+    public Task ExecuteNonEmpty(CancellationToken ct = default)
+    {
+        if(_requests.Count == 0) return Task.CompletedTask;
+        
+        return _db.WriteItemsInTransaction(_requests, ct);
+    }
+    
+    public int WriteItemsCount => _requests.Count;
 }
